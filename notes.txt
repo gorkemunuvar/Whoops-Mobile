@@ -1,0 +1,4 @@
+*** SocketIO is not working with flask without installing eventlet on server side and setting 
+    .setTransports(['websocket']) on Flutter side. Explanation is here; 
+
+    https://stackoverflow.com/questions/60348534/connecting-flask-socket-io-server-and-flutter
