@@ -35,7 +35,7 @@ StreamSocket streamSocket = StreamSocket();
 
 void connectAndListen() {
   IO.Socket socket = IO.io(
-      'https://733ff5192744.ngrok.io',
+      'https://d9cd9ef69f2d.ngrok.io',
       IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
           .setExtraHeaders({'foo': 'bar'}) // optional
           .build());
@@ -57,7 +57,7 @@ void connectAndListen() {
 
 void makePostRequest() async {
   //Change the URL when ngrok is started again.
-  String url = 'https://733ff5192744.ngrok.io/sharenote';
+  String url = 'https://d9cd9ef69f2d.ngrok.io/sharenote';
 
   Map<String, String> headers = {
     'Content-Type': 'application/json',
@@ -114,11 +114,29 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.data != null) {
                   print('If scope worked.');
 
-                  print(snapshot.data);
-                  /* var data = jsonDecode(snapshot.data)["notes"] as List;
-                  print(data); */
+                  //print(snapshot.data);
+                  var data = jsonDecode(snapshot.data)["notes"] as List;
 
-                  return Center(child: Text(snapshot.data.toString()));
+                  for (var item in data) {
+                    print(item);
+                  }
+
+                  return ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Container(
+                          height: 50,
+                          //color: Colors.amber[colorCodes[index]],
+                          child: Center(
+                            child: Text(
+                              'Entry ${data[index]}',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ),
+                        );
+                      });
+                  ;
                 }
               }
 
