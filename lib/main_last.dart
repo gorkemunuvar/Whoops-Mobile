@@ -115,33 +115,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void testFunction() {
-    /* Map<String, List> map = {
-      "topping": [
-        {"id": "5001", "type": "None"},
-        {"id": "5002", "type": "Glazed"},
-        {"id": "5005", "type": "Sugar"},
-        {"id": "5007", "type": "Powdered Sugar"},
-        {"id": "5006", "type": "Chocolate with Sprinkles"},
-        {"id": "5003", "type": "Chocolate"},
-        {"id": "5004", "type": "Maple"}
-      ]
-    }; */
-
-    Map<String, String> map = {
-      "name": "John Smith",
-      "email": "john@example.com"
-    };
-
-    //don't use map.toString()
-    String str = jsonEncode(map);
-
-    Map<String, dynamic> user = jsonDecode(str);
-
-    print('Howdy, ${user['name']}!');
-    print('We sent the verification link to ${user['email']}.');
-  }
-
   @override
   void initState() {
     super.initState();
@@ -187,53 +160,15 @@ class _HomePageState extends State<HomePage> {
                 if (snapshot.hasError) {
                   return Text('snapshot.hasError');
                 } else {
-                  //print('SnapShot Data: ${snapshot.data[0]}');
-
-                  //Snapshoutdu aykıla lat long degerini al.
-
-                  //testFunction();
-
-                  //print("snapshot");
-                  //print(snapshot.data);
-
                   if (snapshot.data != null) {
-                    /* List list = List<Map<String, dynamic>>.from(
-                        json.decode(snapshot.data)['notes']);
-
-                    final jsonResponse =
-                        jsonDecode(snapshot.data)['notes'] as List;
-
-                    var data = json.decode(snapshot.data);
-                    //print(data); */
-
                     print(snapshot.data);
                     var data = jsonDecode(snapshot.data)["notes"] as List;
                     print(data);
 
-                    //var rest = data["notes"] as List;
-                    //print(jsonResponse);
-
                     print("if worked.");
                   }
 
-                  //var rest = data["notes"] as List;
-
-                  /*List<Note> list =
-                      rest.map<Note>((json) => Note.fromJson(json)).toList();
-
-                  print(list); */
-
-                  /* var noteObjsJson = jsonDecode(snapshot.data)['notes'] as List;
-                  List<Note> noteObjs = noteObjsJson
-                      .map((noteJson) => Note.fromJson(noteJson))
-                      .toList(); */
-
-                  //print('noteObjs: $noteObjs');R
-
-                  /* Map<String, dynamic> json = jsonDecode(
-                    snapshot.data[0].toString(),
-                  );
-
+                  /*
                   //lat lang ile createMarker kullan.
                   double lat = double.parse(json['latitude']);
                   double lng = double.parse(json['longitude']);

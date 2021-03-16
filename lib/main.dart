@@ -1,8 +1,12 @@
+import 'dart:math';
 import 'dart:async';
 import 'dart:convert';
+import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_map/flutter_map.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +39,7 @@ StreamSocket streamSocket = StreamSocket();
 
 void connectAndListen() {
   IO.Socket socket = IO.io(
-      'https://d9cd9ef69f2d.ngrok.io',
+      'https://30f7b38442e2.ngrok.io',
       IO.OptionBuilder().setTransports(['websocket']) // for Flutter or Dart VM
           .setExtraHeaders({'foo': 'bar'}) // optional
           .build());
@@ -57,18 +61,20 @@ void connectAndListen() {
 
 void makePostRequest() async {
   //Change the URL when ngrok is started again.
-  String url = 'https://d9cd9ef69f2d.ngrok.io/sharenote';
+  String url = 'https://30f7b38442e2.ngrok.io/sharenote';
 
   Map<String, String> headers = {
     'Content-Type': 'application/json',
   };
 
+  Random random = Random();
+
   final body = jsonEncode({
     'nick': 'test',
-    'latitude': '46.15789',
-    'longitude': '54.78964',
+    'latitude': '${random.nextInt(90)}.1578',
+    'longitude': '${random.nextInt(90)}.7896',
     'note': 'What up?',
-    'time': '5',
+    'time': '${random.nextInt(30)}',
   });
 
   http.Response response = await http.post(
@@ -86,6 +92,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Marker createMarker(double latitude, double longitude) {
+    LatLng latLng = LatLng(latitude, longitude);
+
+    return Marker(
+      anchorPos: AnchorPos.align(AnchorAlign.center),
+      height: 30,
+      width: 30,
+      point: latLng,
+      builder: (ctx) => Icon(Icons.pin_drop),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,15 +114,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final PopupController _popupController = PopupController();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
-            flex: 1,
-            child: TextButton(
-                onPressed: makePostRequest, child: Text('Click Me'))),
-        Expanded(
-          flex: 4,
+          flex: 9,
           child: StreamBuilder(
             stream: streamSocket.getResponse,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -117,32 +133,113 @@ class _HomePageState extends State<HomePage> {
                   //print(snapshot.data);
                   var data = jsonDecode(snapshot.data)["notes"] as List;
 
+                  List<Marker> markers = [];
+
                   for (var item in data) {
-                    print(item);
+                    double latitude = double.parse(item['latitude']);
+                    double longitude = double.parse(item['longitude']);
+
+                    LatLng latLng = LatLng(latitude, longitude);
+
+                    Marker marker = Marker(
+                      anchorPos: AnchorPos.align(AnchorAlign.center),
+                      height: 30,
+                      width: 30,
+                      point: latLng,
+                      builder: (ctx) => Icon(Icons.pin_drop),
+                    );
+
+                    markers.add(marker);
                   }
 
-                  return ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return Container(
-                          height: 50,
-                          //color: Colors.amber[colorCodes[index]],
-                          child: Center(
-                            child: Text(
-                              'Entry ${data[index]}',
-                              style: TextStyle(fontSize: 12),
-                            ),
-                          ),
-                        );
-                      });
-                  ;
+                  print(markers.length);
+
+                  return FlutterMapWidget(
+                    markers: markers,
+                    popupController: _popupController,
+                  );
                 }
               }
 
-              return Center(child: Text('No data right now.'));
+              return FlutterMapWidget(
+                markers: [],
+                popupController: _popupController,
+              );
+
+              //return Center(child: Text('No data right now.'));
             },
           ),
+        ),
+        Expanded(
+            flex: 1,
+            child: TextButton(
+                onPressed: makePostRequest,
+                child: Text(
+                  'Click Me',
+                  style: TextStyle(fontSize: 20),
+                ))),
+      ],
+    );
+  }
+}
+
+class FlutterMapWidget extends StatelessWidget {
+  final List<Marker> markers;
+  final PopupController popupController;
+
+  FlutterMapWidget({this.markers, this.popupController});
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterMap(
+      options: MapOptions(
+        //center: points[0],
+        maxZoom: 18,
+        zoom: 3,
+        plugins: [
+          MarkerClusterPlugin(),
+        ],
+        onTap: (_) =>
+            popupController.hidePopup(), // Hide popup when the map is tapped.
+      ),
+      layers: [
+        TileLayerOptions(
+          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          subdomains: ['a', 'b', 'c'],
+        ),
+        MarkerClusterLayerOptions(
+          maxClusterRadius: 120,
+          disableClusteringAtZoom: 6,
+          size: Size(28, 28),
+          anchor: AnchorPos.align(AnchorAlign.center),
+          fitBoundsOptions: FitBoundsOptions(
+            padding: EdgeInsets.all(50),
+          ),
+          markers: markers,
+          polygonOptions: PolygonOptions(
+              borderColor: Colors.red,
+              color: Colors.black12,
+              borderStrokeWidth: 3),
+          popupOptions: PopupOptions(
+              popupSnap: PopupSnap.top,
+              popupController: popupController,
+              popupBuilder: (_, marker) => Container(
+                    width: 150,
+                    height: 80,
+                    color: Colors.white,
+                    child: GestureDetector(
+                      onTap: () => debugPrint("Popup tap!"),
+                      child: Text(
+                          "I'm gonna leave a note here comming soon and you can see what i do here!!",
+                          style: TextStyle(fontSize: 15)),
+                    ),
+                  )),
+          builder: (context, markers) {
+            return FloatingActionButton(
+              child: Text(markers.length.toString()),
+              onPressed: null,
+            );
+          },
         ),
       ],
     );
