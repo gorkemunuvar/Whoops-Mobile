@@ -1,8 +1,10 @@
+import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 class FlutterMapWidget extends StatelessWidget {
+  //final LatLng center;
   final List<Marker> markers;
   final PopupController popupController;
 
@@ -12,7 +14,8 @@ class FlutterMapWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        //center: points[0],
+        minZoom: 4,
+        //center: center,
         maxZoom: 18,
         zoom: 3,
         plugins: [

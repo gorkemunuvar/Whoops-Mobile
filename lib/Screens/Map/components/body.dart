@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:notes_on_map/services/StreamSocket.dart';
 import 'package:notes_on_map/Screens/Map/components/map_widget.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 import 'package:notes_on_map/screens/Map/components/bottom_sheet_modal.dart';
+import 'package:notes_on_map/services/CurrentLocation.dart';
 
 List<Marker> getMarkers(String json) {
   var data = jsonDecode(json)["notes"] as List;
@@ -48,13 +50,21 @@ class Body extends StatelessWidget {
     );
   }
 
+  void getCurrentLocation() async {
+    CurrentLocation currentLocation = CurrentLocation();
+    Position position = await currentLocation.get();
+
+    print('Latitude: ${position.latitude} Longitude ${position.longitude}');
+  }
+
   @override
   Widget build(BuildContext context) {
     StreamSocket streamSocket = StreamSocket();
 
-    String url = 'https://4a5367c24398.ngrok.io';
+    String url = 'https://fef9ad34cafb.ngrok.io';
     final PopupController popupController = PopupController();
 
+    getCurrentLocation();
     streamSocket.listen(url);
 
     return Scaffold(
