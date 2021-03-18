@@ -42,15 +42,20 @@ class FlutterMapWidget extends StatelessWidget {
           popupOptions: PopupOptions(
               popupSnap: PopupSnap.top,
               popupController: popupController,
-              popupBuilder: (_, marker) => Container(
-                    width: 150,
-                    height: 80,
+              popupBuilder: (_, marker) => Card(
                     color: Colors.white,
-                    child: GestureDetector(
-                      onTap: () => debugPrint("Popup tap!"),
-                      child: Text(
-                          "I'm gonna leave a note here comming soon and you can see what i do here!!",
-                          style: TextStyle(fontSize: 15)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: Container(
+                      width: 150,
+                      height: 80,
+                      child: GestureDetector(
+                        onTap: () => debugPrint("Popup tap!"),
+                        child: Text(
+                            "I'm gonna leave a note here comming soon and you can see what i do here!!",
+                            style: TextStyle(fontSize: 15)),
+                      ),
                     ),
                   )),
           builder: (context, markers) {

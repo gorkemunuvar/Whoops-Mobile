@@ -3,10 +3,8 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class StreamSocket {
   var _socketResponse = StreamController<String>();
-
-  void Function(String) get addResponse => _socketResponse.sink.add;
-
   Stream<String> get getResponse => _socketResponse.stream;
+  void Function(String) get addResponse => _socketResponse.sink.add;
 
   void dispose() {
     _socketResponse.close();
