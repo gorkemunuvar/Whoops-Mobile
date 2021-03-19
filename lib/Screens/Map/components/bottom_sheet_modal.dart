@@ -10,7 +10,7 @@ class BottomSheetModal extends StatelessWidget {
   Widget build(BuildContext context) {
     Testing test = Testing();
     Networking networking = Networking();
-    String url = 'https://fef9ad34cafb.ngrok.io';
+    String url = 'https://529f0bcd865f.ngrok.io';
 
     String whoop, time;
     return Container(

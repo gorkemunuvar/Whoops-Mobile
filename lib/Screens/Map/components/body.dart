@@ -50,21 +50,20 @@ class Body extends StatelessWidget {
     );
   }
 
-  void getCurrentLocation() async {
+/*   void getCurrentLocation() async {
     CurrentLocation currentLocation = CurrentLocation();
     Position position = await currentLocation.get();
 
     print('Latitude: ${position.latitude} Longitude ${position.longitude}');
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
     StreamSocket streamSocket = StreamSocket();
 
-    String url = 'https://fef9ad34cafb.ngrok.io';
-    final PopupController popupController = PopupController();
+    String url = 'https://529f0bcd865f.ngrok.io';
 
-    getCurrentLocation();
+    //getCurrentLocation();
     streamSocket.listen(url);
 
     return Scaffold(
@@ -85,14 +84,12 @@ class Body extends StatelessWidget {
             if (snapshot.data != null) {
               return FlutterMapWidget(
                 markers: getMarkers(snapshot.data),
-                popupController: popupController,
               );
             }
           }
 
           return FlutterMapWidget(
             markers: [],
-            popupController: popupController,
           );
         },
       ),
