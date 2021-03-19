@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
+import 'package:notes_on_map/services/CurrentLocation.dart';
 import 'package:notes_on_map/services/Testing.dart';
 import 'package:notes_on_map/services/Networking.dart';
 import 'package:notes_on_map/components/rounded_button.dart';
@@ -10,7 +12,7 @@ class BottomSheetModal extends StatelessWidget {
   Widget build(BuildContext context) {
     Testing test = Testing();
     Networking networking = Networking();
-    String url = 'https://529f0bcd865f.ngrok.io';
+    String url = 'https://3940dcd92377.ngrok.io';
 
     String whoop, time;
     return Container(
@@ -32,14 +34,18 @@ class BottomSheetModal extends StatelessWidget {
             ),
             RoundedButton(
               text: 'Share',
-              press: () {
+              press: () async {
+                CurrentLocation cLocation = CurrentLocation();
+                LatLng currentLocation = await cLocation.get();
+                print('Location: $currentLocation');
+
                 if (whoop != '' && time != '') {
                   networking.post(
                       '$url/sharenote',
                       jsonEncode({
                         'nick': 'gorkem',
-                        'latitude': '38.73222',
-                        'longitude': '35.48528',
+                        'latitude': currentLocation.latitude.toString(),
+                        'longitude': currentLocation.longitude.toString(),
                         'note': whoop,
                         'time': time,
                       }));

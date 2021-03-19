@@ -8,9 +8,6 @@
 Question: Where to use socket.emit or post request. When we want to 
 send data to server from clients both ways can be use. Ask in stackoverflow.
 
-
-
-
-use Case
-1 - floating buttona basıldığında rasgele marker bilgilerini sunucuya post et.
-2 - 
+- Eğer konum açık ise direk konuma zoomla.
+- Konum açık değilse haritayı geriden göster.
+- Eğer konum butonuna basılırsa konuma zoomla
