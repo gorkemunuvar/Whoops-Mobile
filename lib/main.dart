@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'Screens/Welcome/welcome_screen.dart';
+import 'screens/Signin/signin_screen.dart';
 import 'constants.dart';
 
 void main() => runApp(MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: WelcomeScreen(),
+      home: SignInScreen(),
     );
   }
 }
