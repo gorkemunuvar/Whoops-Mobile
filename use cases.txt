@@ -1,0 +1,59 @@
+Login Screen
+-------------------
+- Sign In    	  -> JWT login auth yap ve Map Screen'e yönlendir.
+- Sign Up    	  -> Register Screen
+- Forgot Password -> Forgot Password Screen
+- Login With 	  -> Facebook, Gmail or Twitter auth
+- Remeber Me 	  -> Bilgileri hatırla
+
+
+
+Register Screen
+-------------------
+- Register 	  -> Register ol ve token alarak Map Screen'e yönlendir.
+- Sign In	  -> Sign In Screen
+
+
+
+Map Screen
+-------------------
+- Search Box 	  -> '#' ile başlayan bir arama yapılırsa aranan tag'e ait whoopları haritada göster
+		  -> '@' ile başlayan bir arama yapılırsa aranan kullanıcıya ait whoopları haritada göster.
+		  -> Tırnak içinde aranan bir metin varsa aranan konumu haritada zoom.
+		  -> Normal bir metin aranıyorsa metni içeren whoopları haritada göster.
+
+- Navigate Butonu -> Konumu aç modal'ı ekle.
+- Timeline Butonu -> Timeline Screen
+- Menu Butonu	  -> Açılır kapanır özellikleri göster.
+- Message butonu  -> Messages Screen
+- Others butonu	  -> Other People Screen
+- Profile Butonu  -> MyProfile Screen
+- Settings Butonu -> Settings Screen
+- Curren Loc. But.-> Bulunduğum konuma zoomla.
+- Whoop Butonu    -> Whoop, Time, Tag içeren modal açtır.
+- Direciton Butonu-> Herhangi bir whoopa tıklayınca aktif olacak. Bulunulan konumdan whoopa olan mesafeyi çizecek.
+		     (Yeni bir screende olabilir.)
+
+
+Timeline Screen
+-------------------
+- Search Box 	  -> '#' ile başlayan bir arama yapılırsa aranan tag'e ait whoopları listele.
+		  -> '@' ile başlayan bir arama yapılırsa aranan kullanıcıya ait whoopları listele.
+		  -> Tırnak içinde aranan bir metin varsa aranan konumdaki whoopları listele.
+		  -> Normal bir metin aranıyorsa metni içeren whoopları listele.
+
+- Message Button  -> Message Screen
+- Profile Button  -> Another User Screen	
+- List Item Click -> Tıklanan whoopu haritada göster.
+
+
+Profile Screen
+-------------------
+- Whoop It. Click -> Whoop aktif ise haritada göster.
+- Build		  -> Haridada kullanıcının tüm notlarını göster.
+
+
+
+
+
+		  
