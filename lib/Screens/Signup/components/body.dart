@@ -33,32 +33,26 @@ class Body extends StatelessWidget {
               TextFieldComponent(hintText: 'Email'),
               TextFieldComponent(hintText: 'Şifre', obscureText: true),
               SizedBox(height: 20),
-              SizedBox(
-                height: 50.0,
-                child: ButtonComponent(
-                  text: 'Sign Up',
-                  textColor: kPrimaryWhiteColor,
-                  backgroundColor: kPrimaryDarkColor,
-                ),
+              ButtonComponent(
+                text: 'Kayıt Ol',
+                textColor: kPrimaryWhiteColor,
+                backgroundColor: kPrimaryDarkColor,
               ),
-              SizedBox(height: 5),
-              SizedBox(
-                height: 50.0,
-                child: ButtonComponent(
-                  text: 'Sign Ip',
-                  textColor: kPrimaryDarkColor,
-                  backgroundColor: kPrimaryWhiteColor,
-                ),
+              SizedBox(height: 10),
+              ButtonComponent(
+                text: 'Giriş',
+                textColor: kPrimaryDarkColor,
+                backgroundColor: kPrimaryWhiteColor,
               ),
               SizedBox(height: 75),
               Center(
                 child: Text(
-                  'Or Signup   With',
+                  'ile kayıt ol',
                   style:
                       TextStyle(color: kPrimaryDarkColor, fontFamily: 'Roboto'),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

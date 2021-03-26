@@ -33,7 +33,7 @@ class Body extends StatelessWidget {
                     children: [
                       CheckBoxWidget(),
                       Text(
-                        'Remember Me',
+                        'Beni Hatırla',
                         style: TextStyle(
                           color: kPrimaryDarkColor,
                           fontFamily: 'Roboto',
@@ -42,7 +42,7 @@ class Body extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    'Forgot Password',
+                    'Şifremi Unuttum',
                     style: TextStyle(
                       color: kPrimaryDarkColor,
                       fontFamily: 'Roboto',
@@ -51,32 +51,26 @@ class Body extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
-              SizedBox(
-                height: 50.0,
-                child: ButtonComponent(
-                  text: 'Sign In',
-                  textColor: kPrimaryWhiteColor,
-                  backgroundColor: kPrimaryDarkColor,
-                ),
+              ButtonComponent(
+                text: 'Giriş',
+                textColor: kPrimaryWhiteColor,
+                backgroundColor: kPrimaryDarkColor,
               ),
-              SizedBox(height: 5),
-              SizedBox(
-                height: 50.0,
-                child: ButtonComponent(
-                  text: 'Sign Up',
-                  textColor: kPrimaryDarkColor,
-                  backgroundColor: kPrimaryWhiteColor,
-                ),
+              SizedBox(height: 10),
+              ButtonComponent(
+                text: 'Yeni Hesap',
+                textColor: kPrimaryDarkColor,
+                backgroundColor: kPrimaryWhiteColor,
               ),
               SizedBox(height: 75),
               Center(
                 child: Text(
-                  'Or Login With',
+                  'ile giriş yap',
                   style:
                       TextStyle(color: kPrimaryDarkColor, fontFamily: 'Roboto'),
                 ),
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
