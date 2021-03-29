@@ -10,7 +10,13 @@ class ChangePasswordScreen extends StatelessWidget {
         backgroundColor: kPrimaryDarkColor,
         title: Text('Şifremi Değiştir',
             style: TextStyle(color: kPrimaryLightColor)),
-        leading: Icon(Icons.arrow_back),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+          onPressed: () {},
+        ),
       ),
       backgroundColor: kPrimaryWhiteColor,
       body: Body(),

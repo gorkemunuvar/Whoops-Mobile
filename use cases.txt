@@ -35,12 +35,19 @@ Map Screen
 		     (Yeni bir screende olabilir.)
 
 
-Timeline Screen
+Timeline Screen (Anasayfada timeline yerine ara butonu olabilir.)
 -------------------
+- Serach app bar linkteki gibi olsun
+- https://stackoverflow.com/questions/49966980/how-to-create-toolbar-searchview-in-flutter
+
 - Search Box 	  -> '#' ile başlayan bir arama yapılırsa aranan tag'e ait whoopları listele.
 		  -> '@' ile başlayan bir arama yapılırsa aranan kullanıcıya ait whoopları listele.
 		  -> Tırnak içinde aranan bir metin varsa aranan konumdaki whoopları listele.
 		  -> Normal bir metin aranıyorsa metni içeren whoopları listele.
+
+		  -> Searchbox ile gelen sonuçları farklı bir ekranda göster. (SearchBoxResult)
+		  -> SearchResultScreen'e filtreli verileri göstermek için 'Sonuçları Haritada Göster' gibi bir 
+		  	 buton koy.
 
 - Message Button  -> Message Screen
 - Profile Button  -> Another User Screen	
@@ -49,6 +56,8 @@ Timeline Screen
 
 Profile Screen
 -------------------
+- Tasarım linkteki gibi olsun.
+- https://www.developerlibs.com/2018/08/flutter-collapsing-toolbar-layout.html
 - Whoop It. Click -> Whoop aktif ise haritada göster.
 - Build		  -> Haridada kullanıcının tüm notlarını göster.
 

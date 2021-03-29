@@ -1,4 +1,4 @@
---------------Sharing Note Use Case--------------
+-------------- Sharing Note Use Case --------------
 [--] - Create a marker instance randomly on mobile
 [--] - Emit the marker(note) information to the server
 [--] - When server gets note, emit to all the clients.
@@ -11,3 +11,7 @@ send data to server from clients both ways can be use. Ask in stackoverflow.
 - Eğer konum açık ise direk konuma zoomla.
 - Konum açık değilse haritayı geriden göster.
 - Eğer konum butonuna basılırsa konuma zoomla
+
+Timeline , all messages, other_users 'ı bitir.
+Searchbox aynı şekilde çalışacak. sadece altında duran itemlar değişecek.
+
