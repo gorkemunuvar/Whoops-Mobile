@@ -1,21 +1,38 @@
+import 'whoop_card.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/constants.dart';
-import 'package:notes_on_map/screens/Timeline/components/background.dart';
 
 class Body extends StatelessWidget {
+  final List<String> places = [
+    "Kadıköy",
+    "Beşiktaş",
+    "Talas",
+    "Karaköy",
+    "Pozcu",
+    "Turgut Özal",
+    "Kadıköy",
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return Background(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 45.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [],
-          ),
-        ),
-      ),
+    return Container(child: _buildList());
+  }
+
+  String query = '';
+  Widget _buildList() {
+    final searchItems = query.isEmpty
+        ? places
+        : places
+            .where((c) => c.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+
+    return ListView.builder(
+      itemCount: searchItems.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+          child: WhoopCard(searchItems: searchItems, title: searchItems[index]),
+        );
+      },
     );
   }
 }
