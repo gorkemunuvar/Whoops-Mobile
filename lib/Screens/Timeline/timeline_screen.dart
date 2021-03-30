@@ -46,9 +46,7 @@ class _TimelineScreenState extends State<TimelineScreen> {
           )
         ],
       ),
-      body: Container(
-        child: Body(),
-      ),
+      body: Body(),
     );
   }
 }
