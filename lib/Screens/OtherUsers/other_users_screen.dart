@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'components/body.dart';
-import 'components/user_info_card.dart';
+import 'package:flutter/material.dart';
+import 'package:notes_on_map/constants.dart';
 import 'components/user_search_delegate.dart';
 
 class OtherUsersScreen extends StatefulWidget {
@@ -23,27 +23,33 @@ class _OtherUsersScreenState extends State<OtherUsersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tüm Kullanıcılar'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () async {
-              final String selected = await showSearch(
-                context: context,
-                delegate: UserSearchDelegate(users),
-              );
-
-              if (selected != null && selected != query) {
-                setState(() {
-                  query = selected;
-                });
-              }
-            },
-          )
-        ],
-      ),
+      backgroundColor: kPrimaryWhiteColor,
+      appBar: _buildAppBar(),
       body: Body(),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return AppBar(
+      backgroundColor: kPrimaryDarkColor,
+      title: Text('Tüm Kullanıcılar'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () async {
+            final String selected = await showSearch(
+              context: context,
+              delegate: UserSearchDelegate(users),
+            );
+
+            if (selected != null && selected != query) {
+              setState(() {
+                query = selected;
+              });
+            }
+          },
+        )
+      ],
     );
   }
 }

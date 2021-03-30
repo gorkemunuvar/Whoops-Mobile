@@ -8,6 +8,7 @@ import 'screens/ForgotPassword/forgot_password.dart';
 import 'screens/ChangePassword/change_password.dart';
 import 'screens/Timeline/timeline_screen.dart';
 import 'screens/OtherUsers/other_users_screen.dart';
+import 'screens/AllMessages/all_messages_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
-      home: OtherUsersScreen(),
+      home: AllMessagesScreen(),
     );
   }
 }

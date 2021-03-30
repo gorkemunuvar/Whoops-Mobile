@@ -16,7 +16,9 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(child: _buildList());
+    return Container(
+      child: _buildList(),
+    );
   }
 
   Widget _buildList() {
@@ -33,8 +35,10 @@ class Body extends StatelessWidget {
           return Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-            child:
-                WhoopCard(searchItems: searchItems, title: searchItems[index]),
+            child: WhoopCard(
+              searchItems: searchItems,
+              title: searchItems[index],
+            ),
           );
         },
       ),

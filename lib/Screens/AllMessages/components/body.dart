@@ -1,5 +1,5 @@
+import 'message_info_card.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/screens/OtherUsers/components/user_info_card.dart';
 
 String query = '';
 

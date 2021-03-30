@@ -15,12 +15,7 @@ class UserInfoCard extends StatelessWidget {
         title,
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
-      subtitle: Text('@asligamze_\nİstanbul, TR'),
-      trailing: IconButton(
-        icon: Icon(Icons.message),
-        onPressed: () {},
-      ),
-      isThreeLine: true,
+      subtitle: Text('5 dk içinde orada olacağım :)'),
     );
   }
 }
