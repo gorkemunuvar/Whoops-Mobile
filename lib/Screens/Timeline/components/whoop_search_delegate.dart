@@ -1,4 +1,4 @@
-import 'whoop_card.dart';
+import '../../../components/whoop_card.dart';
 import 'package:flutter/material.dart';
 
 class WhoopSearchDelegate extends SearchDelegate<String> {
@@ -64,7 +64,7 @@ class WhoopSearchDelegate extends SearchDelegate<String> {
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-          child: WhoopCard(searchItems: searchItems, title: searchItems[index]),
+          child: WhoopCard(title: searchItems[index]),
         );
       },
     );

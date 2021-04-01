@@ -1,17 +1,21 @@
+import 'circle_avatar_component.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/components/circle_avatar_component.dart';
 
 class WhoopCard extends StatelessWidget {
-  final List<String> searchItems;
   final String title;
 
-  WhoopCard({@required this.searchItems, this.title});
+  WhoopCard({this.title});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.white70, width: 1),
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(15.0),
         child: Row(
           children: [
             Padding(
@@ -43,12 +47,14 @@ class WhoopCard extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: 15),
-                    Text('Aktif',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.green,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    /* Text(
+                      'Aktif',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ), */
                   ],
                 ),
                 Row(

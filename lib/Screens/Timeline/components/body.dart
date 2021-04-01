@@ -1,4 +1,4 @@
-import 'whoop_card.dart';
+import '../../../components/whoop_card.dart';
 import 'package:flutter/material.dart';
 
 String query = '';
@@ -32,13 +32,8 @@ class Body extends StatelessWidget {
       child: ListView.builder(
         itemCount: searchItems.length,
         itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-            child: WhoopCard(
-              searchItems: searchItems,
-              title: searchItems[index],
-            ),
+          return WhoopCard(
+            title: searchItems[index],
           );
         },
       ),
