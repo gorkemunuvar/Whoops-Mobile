@@ -2,7 +2,7 @@ import 'components/body.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 
-class MyProfileScreen extends StatelessWidget {
+class AnotherUserScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +16,7 @@ class MyProfileScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text(
-        'My Profile',
+        '@aslıgamze',
         style: TextStyle(color: kPrimaryWhiteColor),
       ),
       leading: IconButton(
@@ -25,7 +25,7 @@ class MyProfileScreen extends StatelessWidget {
       ),
       actions: [
         IconButton(
-          icon: Icon(Icons.settings),
+          icon: Icon(Icons.message),
           onPressed: () {},
         )
       ],

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class WhoopCard extends StatelessWidget {
   final String title;
-  final bool havePicture;
+  final bool haveProfilePicture;
 
-  WhoopCard({this.title, this.havePicture = true});
+  WhoopCard({this.title, this.haveProfilePicture = true});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class WhoopCard extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Row(
           children: [
-            havePicture
+            haveProfilePicture
                 ? Padding(
                     padding: const EdgeInsets.all(8.0),
                     //Picture column
