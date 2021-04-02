@@ -7,36 +7,15 @@ class MessageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildNewAppBar(),
+      appBar: _buildAppBar(),
       body: Body(),
     );
   }
 
   Widget _buildAppBar() {
     return AppBar(
-      backgroundColor: kPrimaryDarkColor,
-      title: Text(
-        '@aslıgamze',
-        style: TextStyle(color: kPrimaryWhiteColor),
-      ),
-      leading: IconButton(
-        icon: Icon(Icons.arrow_back),
-        onPressed: () {},
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(Icons.settings),
-          onPressed: () {},
-        )
-      ],
-    );
-  }
-
-  Widget _buildNewAppBar() {
-    return AppBar(
-      elevation: 0,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
+      backgroundColor: kPrimaryDarkColor,
       flexibleSpace: SafeArea(
         child: Container(
           padding: EdgeInsets.only(right: 16),
@@ -48,7 +27,7 @@ class MessageDetailScreen extends StatelessWidget {
                 },
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Colors.black,
+                  color: kPrimaryWhiteColor,
                 ),
               ),
               SizedBox(
@@ -67,24 +46,15 @@ class MessageDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Kriss Benwat",
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(
-                      height: 6,
-                    ),
-                    Text(
-                      "Online",
-                      style:
-                          TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                      "Mami Kuşko",
+                      style: TextStyle(
+                        color: kPrimaryWhiteColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ],
                 ),
-              ),
-              Icon(
-                Icons.settings,
-                color: Colors.black54,
               ),
             ],
           ),
