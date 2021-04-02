@@ -2,25 +2,68 @@ import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:notes_on_map/components/whoop_card.dart';
 import 'package:notes_on_map/components/circle_avatar_component.dart';
-import 'package:latlong/latlong.dart';
-import 'package:flutter_map/flutter_map.dart';
+import 'package:notes_on_map/components/flutter_map_component.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  bool _pinned = false;
+  bool _snap = false;
+  bool _floating = true;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //Main Column
-      child: Column(
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          backgroundColor: kPrimaryWhiteColor,
+          pinned: _pinned,
+          snap: _snap,
+          floating: _floating,
+          expandedHeight: 350.0,
+          flexibleSpace: _buildFlexibleSpaceBar(),
+        ),
+        _buildSliverList(),
+      ],
+    );
+  }
+
+  //List of Whoop Cards
+  Widget _buildSliverList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (BuildContext context, int index) {
+          return Container(
+            color: kPrimaryWhiteColor,
+            //height: 100.0,
+            child: Center(
+              child: WhoopCard(
+                title: index.toString(),
+                havePicture: false,
+              ),
+            ),
+          );
+        },
+        childCount: 20,
+      ),
+    );
+  }
+
+  Widget _buildFlexibleSpaceBar() {
+    return FlexibleSpaceBar(
+      background: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
-            flex: 1,
             child: Stack(
               overflow: Overflow.visible,
               alignment: Alignment.bottomCenter,
               children: [
                 SizedBox(
-                  height: 200,
+                  height: 250,
                   child: FlutterMapComponent(),
                 ),
                 Positioned(
@@ -45,7 +88,7 @@ class Body extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 5),
+          SizedBox(height: 10),
           //Info column
           Column(
             children: [
@@ -59,7 +102,7 @@ class Body extends StatelessWidget {
                       style: TextStyle(color: kPrimaryDarkColor)),
                 ],
               ),
-              SizedBox(height: 18),
+              SizedBox(height: 15),
               //Row for icons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -94,42 +137,19 @@ class Body extends StatelessWidget {
                   ),
                 ],
               ),
+              SizedBox(height: 25),
+              Text(
+                'Whoop\'larım',
+                style: TextStyle(
+                  color: kPrimaryDarkColor,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
             ],
-          ),
-          Expanded(
-            flex: 3,
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                return WhoopCard(title: items[index].toString());
-              },
-            ),
           ),
         ],
       ),
-    );
-  }
-
-  final items = List<String>.generate(10000, (i) => "Item $i");
-}
-
-class FlutterMapComponent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return FlutterMap(
-      //key: UniqueKey(),
-      options: MapOptions(
-        zoom: 5 /* zoomLevel */,
-        minZoom: 4,
-        maxZoom: 18,
-        center: LatLng(38.9573, 35.2407) /* location */,
-      ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
-        ),
-      ],
     );
   }
 }

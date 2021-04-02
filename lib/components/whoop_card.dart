@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class WhoopCard extends StatelessWidget {
   final String title;
+  final bool havePicture;
 
-  WhoopCard({this.title});
+  WhoopCard({this.title, this.havePicture = true});
 
   @override
   Widget build(BuildContext context) {
@@ -18,20 +19,22 @@ class WhoopCard extends StatelessWidget {
         padding: const EdgeInsets.all(15.0),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              //Picture column
-              child: Column(
-                children: [
-                  CircleAvatarComponent(radius: 38),
-                  SizedBox(height: 7),
-                  Text(
-                    'Aslı Gamze',
-                    style: TextStyle(fontSize: 13),
-                  ),
-                ],
-              ),
-            ),
+            havePicture
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    //Picture column
+                    child: Column(
+                      children: [
+                        CircleAvatarComponent(radius: 38),
+                        SizedBox(height: 7),
+                        Text(
+                          'Aslı Gamze',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
             SizedBox(width: 10.0),
             //Info Column
             Column(
@@ -46,15 +49,6 @@ class WhoopCard extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(width: 15),
-                    /* Text(
-                      'Aktif',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.green,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ), */
                   ],
                 ),
                 Row(

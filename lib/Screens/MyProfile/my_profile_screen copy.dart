@@ -16,7 +16,7 @@ class MyProfileScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text(
-        'Profilim',
+        'My Profile',
         style: TextStyle(color: kPrimaryWhiteColor),
       ),
       leading: IconButton(
