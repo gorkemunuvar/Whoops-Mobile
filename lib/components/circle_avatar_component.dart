@@ -17,7 +17,7 @@ class CircleAvatarComponent extends StatelessWidget {
             backgroundColor: kPrimaryDarkColor,
             child: CircleAvatar(
               radius: radius,
-              child: Image(image: AssetImage('assets/images/profile.png')),
+              backgroundImage: AssetImage('assets/images/profile.png'),
             ),
           )
         : CircleAvatar(

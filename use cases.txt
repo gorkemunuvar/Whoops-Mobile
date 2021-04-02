@@ -14,13 +14,12 @@ Register Screen
 - Sign In	  -> Sign In Screen
 
 
-
 Map Screen
 -------------------
-- Search Box 	  -> '#' ile başlayan bir arama yapılırsa aranan tag'e ait whoopları haritada göster
-		  -> '@' ile başlayan bir arama yapılırsa aranan kullanıcıya ait whoopları haritada göster.
-		  -> Tırnak içinde aranan bir metin varsa aranan konumu haritada zoom.
-		  -> Normal bir metin aranıyorsa metni içeren whoopları haritada göster.
+- Search Box 	-> '#' ile başlayan bir arama yapılırsa aranan tag'e ait whoopları haritada göster
+		  		-> '@' ile başlayan bir arama yapılırsa aranan kullanıcıya ait whoopları haritada göster.
+		  		-> Tırnak içinde aranan bir metin varsa aranan konumu haritada zoom.
+		  		-> Normal bir metin aranıyorsa metni içeren whoopları haritada göster.
 
 - Navigate Butonu -> Konumu aç modal'ı ekle.
 - Timeline Butonu -> Timeline Screen
