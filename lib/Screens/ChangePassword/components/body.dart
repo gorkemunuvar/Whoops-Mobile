@@ -27,15 +27,19 @@ class Body extends StatelessWidget {
                 text: 'Şifremi Değiştir',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () {},
               ),
               SizedBox(height: 10),
-              Text(
-                'Şifremi Unuttum',
-                style: TextStyle(
-                  color: kPrimaryDarkColor,
-                  fontFamily: 'Roboto',
+              GestureDetector(
+                child: Text(
+                  'Şifremi Unuttum',
+                  style: TextStyle(
+                    color: kPrimaryDarkColor,
+                    fontFamily: 'Roboto',
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
+                onTap: () => Navigator.pushNamed(context, '/forgotPassword'),
               )
             ],
           ),

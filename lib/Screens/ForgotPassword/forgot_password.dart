@@ -8,14 +8,18 @@ class ForgotPasswordScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryDarkColor,
-        title: Text('Şifremi Unuttum',
-            style: TextStyle(color: kPrimaryLightColor)),
+        title: Text(
+          'Şifremi Unuttum',
+          style: TextStyle(color: kPrimaryWhiteColor),
+        ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
             color: Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
       backgroundColor: kPrimaryWhiteColor,

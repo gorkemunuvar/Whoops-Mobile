@@ -38,7 +38,7 @@ class Body extends StatelessWidget {
               vertical: 3.0,
               horizontal: 10.0,
             ),
-            child: UserInfoCard(
+            child: MesssageInfoCard(
               searchItems: searchItems,
               title: searchItems[index],
             ),

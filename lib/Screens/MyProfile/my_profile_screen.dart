@@ -7,12 +7,12 @@ class MyProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Body(),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text(
@@ -21,12 +21,16 @@ class MyProfileScreen extends StatelessWidget {
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_back),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
       actions: [
         IconButton(
           icon: Icon(Icons.settings),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pushNamed(context, '/settings');
+          },
         )
       ],
     );

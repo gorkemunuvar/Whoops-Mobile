@@ -25,6 +25,7 @@ class Body extends StatelessWidget {
                 text: 'Güncelle',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () {},
               ),
             ],
           ),

@@ -19,7 +19,7 @@ class Body extends StatelessWidget {
               SizedBox(height: 15),
               CircleAvatarComponent(
                 radius: 50,
-                borderSize: 52,
+                borderSize: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -49,12 +49,15 @@ class Body extends StatelessWidget {
                 text: 'Şifre Değiştir',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () =>
+                    Navigator.pushNamed(context, '/changePassword'),
               ),
               SizedBox(height: 7),
               ButtonComponent(
                 text: 'Eposta Değiştir',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () => Navigator.pushNamed(context, '/changeEmail'),
               ),
               SizedBox(height: 15),
             ],

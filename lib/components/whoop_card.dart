@@ -25,9 +25,14 @@ class WhoopCard extends StatelessWidget {
                     //Picture column
                     child: Column(
                       children: [
-                        CircleAvatarComponent(
-                          radius: 38,
-                          borderSize: 1,
+                        GestureDetector(
+                          child: CircleAvatarComponent(
+                            radius: 38,
+                            borderSize: 1,
+                          ),
+                          onTap: () {
+                            Navigator.pushNamed(context, '/anotherUser');
+                          },
                         ),
                         SizedBox(height: 7),
                         Text(

@@ -75,7 +75,7 @@ class MessagesSearchDelegate extends SearchDelegate<String> {
           return Padding(
             padding:
                 const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-            child: UserInfoCard(
+            child: MesssageInfoCard(
               searchItems: searchItems,
               title: searchItems[index],
             ),

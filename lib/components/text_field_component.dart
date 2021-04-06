@@ -16,6 +16,7 @@ class TextFieldComponent extends StatelessWidget {
       obscureText: obscureText,
       style: TextStyle(color: kPrimaryDarkColor),
       decoration: InputDecoration(
+        fillColor: kPrimaryDarkColor,
         hintText: hintText,
         hintStyle: TextStyle(
           fontWeight: FontWeight.w300,

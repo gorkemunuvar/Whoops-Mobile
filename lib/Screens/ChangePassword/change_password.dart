@@ -6,20 +6,19 @@ class ChangePasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: kPrimaryDarkColor,
-        title: Text('Şifremi Değiştir',
-            style: TextStyle(color: kPrimaryLightColor)),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        ),
-      ),
+      appBar: _buildAppBar(),
       backgroundColor: kPrimaryWhiteColor,
       body: Body(),
+    );
+  }
+
+  Widget _buildAppBar() {
+    return AppBar(
+      backgroundColor: kPrimaryDarkColor,
+      title: Text(
+        'Şifremi Değiştir',
+        style: TextStyle(color: kPrimaryWhiteColor),
+      ),
     );
   }
 }

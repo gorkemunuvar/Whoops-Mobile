@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
-import 'package:notes_on_map/components/rounded_button.dart';
 import 'package:notes_on_map/components/button_component.dart';
-import 'package:notes_on_map/components/rounded_input_field.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -46,7 +44,7 @@ class BottomSheetModal extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
                 child: ButtonComponent(
-                  text: 'Share',
+                  text: 'Paylaş',
                   textColor: kPrimaryWhiteColor,
                   backgroundColor: kPrimaryDarkColor,
                   onPressed: () {

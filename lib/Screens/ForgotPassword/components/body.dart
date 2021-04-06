@@ -24,6 +24,7 @@ class Body extends StatelessWidget {
                 text: 'Yeni Şifre Gönder',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () {},
               ),
             ],
           ),

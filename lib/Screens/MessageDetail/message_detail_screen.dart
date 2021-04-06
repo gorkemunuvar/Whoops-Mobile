@@ -7,12 +7,12 @@ class MessageDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Body(),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kPrimaryDarkColor,
@@ -22,20 +22,23 @@ class MessageDetailScreen extends StatelessWidget {
           child: Row(
             children: <Widget>[
               IconButton(
-                onPressed: () {
-                  //Navigator.pop(context);
-                },
                 icon: Icon(
                   Icons.arrow_back,
                   color: kPrimaryWhiteColor,
                 ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               SizedBox(
                 width: 2,
               ),
-              CircleAvatar(
-                backgroundImage: AssetImage('assets/images/profile.png'),
-                maxRadius: 20,
+              GestureDetector(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/profile.png'),
+                  maxRadius: 20,
+                ),
+                onTap: () => Navigator.pushNamed(context, '/anotherUser'),
               ),
               SizedBox(
                 width: 12,
@@ -46,7 +49,7 @@ class MessageDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      "Mami Kuşko",
+                      "Mami",
                       style: TextStyle(
                         color: kPrimaryWhiteColor,
                         fontSize: 16,

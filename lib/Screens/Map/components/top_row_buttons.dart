@@ -34,8 +34,8 @@ class TopRowButtons extends StatelessWidget {
             ),
             IconButton(
               icon: Icon(Icons.timeline),
-              onPressed: () {},
               iconSize: 30.0,
+              onPressed: () => Navigator.pushNamed(context, '/timeline'),
             ),
             _AnimatedColumnButtons(),
           ],
@@ -82,29 +82,36 @@ class _AnimatedContentExampleState extends State<_AnimatedColumnButtons> {
                 icon: Icon(
                   Icons.person,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/myProfile');
+                },
               ),
               IconButton(
                 iconSize: 30,
                 icon: Icon(
                   Icons.people_alt_rounded,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/otherUsers');
+                },
               ),
               IconButton(
                 iconSize: 30,
                 icon: Icon(
                   Icons.message,
-                  //size: 35.0,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/messages');
+                },
               ),
               IconButton(
                 iconSize: 30,
                 icon: Icon(
                   Icons.settings,
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/settings');
+                },
               ),
             ],
           ),

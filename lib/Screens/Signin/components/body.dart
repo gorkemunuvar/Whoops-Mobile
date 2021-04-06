@@ -1,10 +1,9 @@
+import 'background.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/components/rounded_button.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:notes_on_map/components/text_field_component.dart';
-import 'package:notes_on_map/Screens/SignIn/components/background.dart';
 import 'package:notes_on_map/components/button_component.dart';
+import 'package:notes_on_map/components/text_field_component.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -32,7 +31,7 @@ class Body extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CheckBoxWidget(),
+                      _CheckBoxWidget(),
                       Text(
                         'Beni Hatırla',
                         style: TextStyle(
@@ -42,31 +41,36 @@ class Body extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text(
-                    'Şifremi Unuttum',
-                    style: TextStyle(
-                      color: kPrimaryDarkColor,
-                      fontFamily: 'Roboto',
+                  GestureDetector(
+                    child: Text(
+                      'Şifremi Unuttum',
+                      style: TextStyle(
+                        color: kPrimaryDarkColor,
+                        fontFamily: 'Roboto',
+                      ),
                     ),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/forgotPassword'),
                   ),
                 ],
               ),
               SizedBox(height: 20),
-/*               RoundedButton(
-                text: 'Giriş',
-                color: Colors.blue,
-                textColor: Colors.black,
-              ), */
               ButtonComponent(
                 text: 'Giriş',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/');
+                },
               ),
               SizedBox(height: 10),
               ButtonComponent(
                 text: 'Yeni Hesap',
                 textColor: kPrimaryDarkColor,
                 backgroundColor: kPrimaryWhiteColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signUp');
+                },
               ),
               SizedBox(height: 75),
               Center(
@@ -104,12 +108,12 @@ class Body extends StatelessWidget {
   }
 }
 
-class CheckBoxWidget extends StatefulWidget {
+class _CheckBoxWidget extends StatefulWidget {
   @override
-  _CheckBoxWidgetState createState() => _CheckBoxWidgetState();
+  __CheckBoxWidgetState createState() => __CheckBoxWidgetState();
 }
 
-class _CheckBoxWidgetState extends State<CheckBoxWidget> {
+class __CheckBoxWidgetState extends State<_CheckBoxWidget> {
   bool rememberMe = false;
 
   void _onRememberMeChanged(bool newValue) => setState(() {

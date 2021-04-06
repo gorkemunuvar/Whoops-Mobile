@@ -37,12 +37,18 @@ class Body extends StatelessWidget {
                 text: 'Kayıt Ol',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/');
+                },
               ),
               SizedBox(height: 10),
               ButtonComponent(
                 text: 'Giriş',
                 textColor: kPrimaryDarkColor,
                 backgroundColor: kPrimaryWhiteColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signIn');
+                },
               ),
               SizedBox(height: 75),
               Center(

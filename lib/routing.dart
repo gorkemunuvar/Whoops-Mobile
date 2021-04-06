@@ -22,7 +22,7 @@ class Routing {
         return MaterialPageRoute(builder: (_) => SignInScreen());
       case signUpRoute:
         return MaterialPageRoute(builder: (_) => SignUpScreen());
-      case allMessagesRoute:
+      case messsagesRoute:
         return MaterialPageRoute(builder: (_) => AllMessagesScreen());
       case anotherUserRoute:
         return MaterialPageRoute(builder: (_) => AnotherUserScreen());
@@ -48,7 +48,10 @@ class Routing {
           builder: (_) => Scaffold(
             appBar: AppBar(),
             body: Center(
-              child: Text('Ters giden birşeyler oldu'),
+              child: Text(
+                'Ters giden birşeyler oldu',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         );
@@ -59,12 +62,12 @@ class Routing {
 const String homeRoute = '/';
 const String signInRoute = '/signIn';
 const String signUpRoute = '/signUp';
-const String allMessagesRoute = '/allMesssages';
+const String messsagesRoute = '/messages';
 const String anotherUserRoute = '/anotherUser';
 const String changeEmailRoute = '/changeEmail';
 const String changePasswordRoute = '/changePassword';
 const String forgotPasswordRoute = '/forgotPassword';
-const String messageDetailRoute = '/messageDetail';
+const String messageDetailRoute = '/messageDetails';
 const String myProfileRoute = '/myProfile';
 const String otherUsersRoute = '/otherUsers';
 const String settingsRoute = '/settings';

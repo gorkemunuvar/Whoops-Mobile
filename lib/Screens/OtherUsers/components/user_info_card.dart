@@ -9,18 +9,23 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: CircleAvatarComponent(radius: 30),
-      title: Text(
-        title,
-        style: TextStyle(fontWeight: FontWeight.bold),
+    return GestureDetector(
+      child: ListTile(
+        leading: CircleAvatarComponent(radius: 30),
+        title: Text(
+          title,
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        subtitle: Text('@asligamze_\nİstanbul, TR'),
+        trailing: IconButton(
+          icon: Icon(Icons.message),
+          onPressed: () {
+            Navigator.pushNamed(context, '/messageDetails');
+          },
+        ),
+        isThreeLine: true,
+        onTap: () => Navigator.pushNamed(context, '/anotherUser'),
       ),
-      subtitle: Text('@asligamze_\nİstanbul, TR'),
-      trailing: IconButton(
-        icon: Icon(Icons.message),
-        onPressed: () {},
-      ),
-      isThreeLine: true,
     );
   }
 }

@@ -13,7 +13,7 @@
     
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="notes_on_map"
+        android:label="whoops"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
