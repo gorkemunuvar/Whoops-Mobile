@@ -13,6 +13,7 @@ class BottomRowButtons extends StatelessWidget {
           width: 50,
           height: 50,
           child: FloatingActionButton(
+            heroTag: 'btn1',
             backgroundColor: kPrimaryDarkColor,
             child: Icon(
               Icons.gps_fixed,
@@ -25,6 +26,7 @@ class BottomRowButtons extends StatelessWidget {
           width: 50,
           height: 50,
           child: FloatingActionButton(
+            heroTag: 'btn2',
             backgroundColor: kPrimaryDarkColor,
             child: Icon(
               Icons.directions_walk,
@@ -37,6 +39,7 @@ class BottomRowButtons extends StatelessWidget {
           width: 50,
           height: 50,
           child: FloatingActionButton(
+            heroTag: 'btn3',
             backgroundColor: kPrimaryDarkColor,
             child: Icon(
               Icons.add,

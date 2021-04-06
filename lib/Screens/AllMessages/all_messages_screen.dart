@@ -3,33 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'components/messages_search_delegate.dart';
 
-class AllMessagesScreen extends StatefulWidget {
-  @override
-  _AllMessagesScreenState createState() => _AllMessagesScreenState();
-}
-
-class _AllMessagesScreenState extends State<AllMessagesScreen> {
-  final List<String> users = [
-    "Aslı",
-    "Görkem",
-    "Burcu",
-    "Ahmet",
-    "Mami",
-    "Turgut",
-    "Gizem",
-  ];
-
-  String query = '';
+class AllMessagesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Body(),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text('Mesajlar'),
@@ -37,16 +21,10 @@ class _AllMessagesScreenState extends State<AllMessagesScreen> {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () async {
-            final String selected = await showSearch(
+            await showSearch(
               context: context,
-              delegate: MessagesSearchDelegate(users),
+              delegate: MessagesSearchDelegate(),
             );
-
-            if (selected != null && selected != query) {
-              setState(() {
-                query = selected;
-              });
-            }
           },
         )
       ],

@@ -5,12 +5,14 @@ class ButtonComponent extends StatelessWidget {
   final Color textColor;
   final Color backgroundColor;
   final double height;
+  final Function onPressed;
 
   ButtonComponent({
     this.text,
     this.textColor,
     this.backgroundColor,
     this.height = 40,
+    this.onPressed,
   });
 
   @override
@@ -32,7 +34,7 @@ class ButtonComponent extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
       ),
     );
   }

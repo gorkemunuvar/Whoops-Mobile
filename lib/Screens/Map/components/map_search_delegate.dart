@@ -1,17 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../../components/whoop_card.dart';
 import 'package:notes_on_map/constants.dart';
 
-class WhoopSearchDelegate extends SearchDelegate<String> {
-  final List<String> places = [
-    "Kadıköy",
-    "Beşiktaş",
-    "Talas",
-    "Karaköy",
-    "Pozcu",
-    "Turgut Özal",
-    "Kadıköy",
-  ];
+class MapSearchDelegate extends SearchDelegate<String> {
+  final List<String> places = ['Aaaaa', 'bbbbbb', 'cccccc', 'dddddd', 'eeeee'];
 
   List<String> filterName = [];
 
@@ -72,9 +63,8 @@ class WhoopSearchDelegate extends SearchDelegate<String> {
         itemCount: searchItems.length,
         itemBuilder: (BuildContext context, int index) {
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-            child: WhoopCard(title: searchItems[index]),
+            padding: const EdgeInsets.all(8.0),
+            child: Text('${searchItems[index]}'),
           );
         },
       ),

@@ -1,35 +1,20 @@
+import 'package:flutter/cupertino.dart';
 import 'components/body.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'components/user_search_delegate.dart';
 
-class OtherUsersScreen extends StatefulWidget {
-  @override
-  _OtherUsersScreenState createState() => _OtherUsersScreenState();
-}
-
-class _OtherUsersScreenState extends State<OtherUsersScreen> {
-  final List<String> users = [
-    "Aslı",
-    "Görkem",
-    "Burcu",
-    "Ahmet",
-    "Mami",
-    "Turgut",
-    "Gizem",
-  ];
-
-  String query = '';
+class OtherUsersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Body(),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text('Tüm Kullanıcılar'),
@@ -37,16 +22,10 @@ class _OtherUsersScreenState extends State<OtherUsersScreen> {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () async {
-            final String selected = await showSearch(
+            await showSearch(
               context: context,
-              delegate: UserSearchDelegate(users),
+              delegate: UserSearchDelegate(),
             );
-
-            if (selected != null && selected != query) {
-              setState(() {
-                query = selected;
-              });
-            }
           },
         )
       ],

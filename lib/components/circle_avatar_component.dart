@@ -13,7 +13,7 @@ class CircleAvatarComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return borderSize != null
         ? CircleAvatar(
-            radius: borderSize,
+            radius: radius + borderSize,
             backgroundColor: kPrimaryDarkColor,
             child: CircleAvatar(
               radius: radius,
@@ -22,7 +22,7 @@ class CircleAvatarComponent extends StatelessWidget {
           )
         : CircleAvatar(
             radius: radius,
-            child: Image(image: AssetImage('assets/images/profile.png')),
+            backgroundImage: AssetImage('assets/images/profile.png'),
           );
   }
 }

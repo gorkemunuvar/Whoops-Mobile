@@ -21,11 +21,14 @@ class WhoopCard extends StatelessWidget {
           children: [
             haveProfilePicture
                 ? Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     //Picture column
                     child: Column(
                       children: [
-                        CircleAvatarComponent(radius: 38),
+                        CircleAvatarComponent(
+                          radius: 38,
+                          borderSize: 1,
+                        ),
                         SizedBox(height: 7),
                         Text(
                           'Aslı Gamze',

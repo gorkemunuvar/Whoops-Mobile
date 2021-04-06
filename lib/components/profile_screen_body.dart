@@ -154,7 +154,7 @@ class _ProfileMapComponent extends StatelessWidget {
                 //Profile Picture
                 CircleAvatarComponent(
                   radius: 40,
-                  borderSize: 42,
+                  borderSize: 3,
                 ),
                 SizedBox(height: 5),
                 Text(

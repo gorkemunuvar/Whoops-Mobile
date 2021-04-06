@@ -3,35 +3,17 @@ import 'package:notes_on_map/constants.dart';
 import 'components/whoop_search_delegate.dart';
 import 'package:notes_on_map/screens/Timeline/components/body.dart';
 
-class TimelineScreen extends StatefulWidget {
-  @override
-  _TimelineScreenState createState() => _TimelineScreenState();
-}
-
-class _TimelineScreenState extends State<TimelineScreen> {
-  //Places yerine bir whoop'a ait tüm veriler belirli bir sayıda
-  //çekilir ve timeline anasayfasında listelenebilir.
-  final List<String> places = [
-    "Kadıköy",
-    "Beşiktaş",
-    "Talas",
-    "Karaköy",
-    "Pozcu",
-    "Turgut Özal",
-    "Kadıköy",
-  ];
-
-  String query = '';
+class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kPrimaryWhiteColor,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: Body(),
     );
   }
 
-  Widget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text('Akış'),
@@ -39,18 +21,12 @@ class _TimelineScreenState extends State<TimelineScreen> {
         IconButton(
           icon: Icon(Icons.search),
           onPressed: () async {
-            final String selected = await showSearch(
+            await showSearch(
               context: context,
-              delegate: WhoopSearchDelegate(places),
+              delegate: WhoopSearchDelegate(),
             );
-
-            if (selected != null && selected != query) {
-              setState(() {
-                query = selected;
-              });
-            }
           },
-        )
+        ),
       ],
     );
   }

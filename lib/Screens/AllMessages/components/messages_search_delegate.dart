@@ -1,12 +1,20 @@
+import 'package:notes_on_map/constants.dart';
+
 import 'message_info_card.dart';
 import 'package:flutter/material.dart';
 
 class MessagesSearchDelegate extends SearchDelegate<String> {
-  final List<String> places;
+  final List<String> users = [
+    "Aslı",
+    "Görkem",
+    "Burcu",
+    "Ahmet",
+    "Mami",
+    "Turgut",
+    "Gizem",
+  ];
 
   List<String> filterName = [];
-
-  MessagesSearchDelegate(this.places);
 
   @override
   List<Widget> buildActions(BuildContext context) {
@@ -59,17 +67,21 @@ class MessagesSearchDelegate extends SearchDelegate<String> {
             .where((c) => c.toLowerCase().contains(query.toLowerCase()))
             .toList();
 
-    return ListView.builder(
-      itemCount: searchItems.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
-          child: UserInfoCard(
-            searchItems: searchItems,
-            title: searchItems[index],
-          ),
-        );
-      },
+    return Container(
+      color: kPrimaryWhiteColor,
+      child: ListView.builder(
+        itemCount: searchItems.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 3.0, horizontal: 10.0),
+            child: UserInfoCard(
+              searchItems: searchItems,
+              title: searchItems[index],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -77,7 +89,7 @@ class MessagesSearchDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     final suggestions = query.isEmpty
         ? _history
-        : places.where((c) => c.toLowerCase().contains(query)).toList();
+        : users.where((c) => c.toLowerCase().contains(query)).toList();
 
     return _buildList();
 

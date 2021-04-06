@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:notes_on_map/components/rounded_button.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
@@ -51,6 +52,11 @@ class Body extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 20),
+/*               RoundedButton(
+                text: 'Giriş',
+                color: Colors.blue,
+                textColor: Colors.black,
+              ), */
               ButtonComponent(
                 text: 'Giriş',
                 textColor: kPrimaryWhiteColor,

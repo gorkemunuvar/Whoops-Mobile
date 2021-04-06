@@ -1,3 +1,4 @@
+import 'map_search_delegate.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 
@@ -12,10 +13,15 @@ class TopRowButtons extends StatelessWidget {
         SizedBox(
           width: 45.0,
           height: 45.0,
-          child: FloatingActionButton(
-            backgroundColor: Colors.transparent,
-            child: Icon(Icons.search_rounded),
-            onPressed: () {},
+          child: IconButton(
+            icon: Icon(Icons.search_rounded),
+            iconSize: 35,
+            onPressed: () async {
+              await showSearch(
+                context: context,
+                delegate: MapSearchDelegate(),
+              );
+            },
           ),
         ),
         Row(
@@ -31,13 +37,6 @@ class TopRowButtons extends StatelessWidget {
               onPressed: () {},
               iconSize: 30.0,
             ),
-            /* IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: () {
-                print('Tapped menu icon.');
-              },
-              iconSize: 30.0,
-            ), */
             _AnimatedColumnButtons(),
           ],
         )
