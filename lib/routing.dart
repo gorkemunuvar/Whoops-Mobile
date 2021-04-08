@@ -59,7 +59,7 @@ class Routing {
   }
 }
 
-const String homeRoute = '/';
+const String homeRoute = '/map';
 const String signInRoute = '/signIn';
 const String signUpRoute = '/signUp';
 const String messsagesRoute = '/messages';

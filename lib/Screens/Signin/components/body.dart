@@ -60,7 +60,7 @@ class Body extends StatelessWidget {
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushNamed(context, '/map');
                 },
               ),
               SizedBox(height: 10),
