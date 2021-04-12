@@ -58,7 +58,7 @@ Profile Screen
 - Tasarım linkteki gibi olsun.
 - https://www.developerlibs.com/2018/08/flutter-collapsing-toolbar-layout.html
 - Whoop It. Click -> Whoop aktif ise haritada göster.
-- Build		  -> Haridada kullanıcının tüm notlarını göster.
+- Build		      -> Haridada kullanıcının tüm notlarını göster.
 
 
 

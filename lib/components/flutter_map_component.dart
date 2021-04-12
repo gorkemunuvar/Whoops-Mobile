@@ -11,7 +11,7 @@ StreamSocket streamSocket = StreamSocket();
 class FlutterMapComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    streamSocket.listen('https://3e955d5a67e6.ngrok.io');
+    streamSocket.listen('https://bcb9718efedd.ngrok.io');
 
     final PopupController _popupController = PopupController();
 

@@ -1,2 +1,2 @@
-Whoopların açılamaları harita üzerinde çok uzun olmamalı.
+Whoopların açılamaları harita üzerinde çok uzun bir text olmamalı.
 Bu yüzden whoopa tıklanarak whoop detail ekranında whoopa dair daha fazla açıklama görüntülenebilir.
