@@ -65,7 +65,7 @@ class Body extends StatelessWidget {
               ),
               SizedBox(height: 10),
               ButtonComponent(
-                text: 'Yeni Hesap',
+                text: 'Kayıt Ol',
                 textColor: kPrimaryDarkColor,
                 backgroundColor: kPrimaryWhiteColor,
                 onPressed: () {

@@ -4,15 +4,18 @@ import 'package:notes_on_map/constants.dart';
 class TextFieldComponent extends StatelessWidget {
   final String hintText;
   final bool obscureText;
+  final TextEditingController controller;
 
   TextFieldComponent({
     this.hintText,
+    this.controller,
     this.obscureText = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
       style: TextStyle(color: kPrimaryDarkColor),
       decoration: InputDecoration(

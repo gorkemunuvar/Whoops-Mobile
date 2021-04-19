@@ -4,10 +4,60 @@ import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:notes_on_map/Screens/SignUp/components/background.dart';
 import 'package:notes_on_map/components/button_component.dart';
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 class Body extends StatelessWidget {
+  Future<http.Response> post(dynamic body) {
+    return http.post(
+      'https://3760c477f05f.ngrok.io/signup',
+      body: json.encode(body),
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+  }
+
+  void _handleSignup(
+    String email,
+    String password,
+    BuildContext context,
+  ) async {
+    dynamic body = {
+      'email': email,
+      'password': password,
+    };
+
+    //Parametreler ile  POST isteği yap
+    http.Response response = await post(body);
+
+    //Eğer başarılı ise Login Page' yönlendir
+    if (response.statusCode == 201)
+      Navigator.pushNamed(context, '/signIn');
+
+    //Hatalı sonuç döner ise uyarı ver.
+    else
+      print('${response.statusCode}. Bir hata ile karşılaştınız.');
+  }
+
+  String _email = '';
+  String _password = '';
+
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+
+  _printEmailValue() {
+    _email = _emailController.text;
+  }
+
+  _printPasswordValue() {
+    _password = _passwordController.text;
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    _emailController.addListener(_printEmailValue);
+    _passwordController.addListener(_printPasswordValue);
 
     return Background(
       child: Padding(
@@ -21,7 +71,7 @@ class Body extends StatelessWidget {
                 height: size.height / 3,
               ),
               Text(
-                'Register',
+                'Kayıt Ol',
                 style: TextStyle(
                   fontSize: 30.0,
                   fontFamily: 'Roboto',
@@ -30,15 +80,22 @@ class Body extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              TextFieldComponent(hintText: 'Email'),
-              TextFieldComponent(hintText: 'Şifre', obscureText: true),
+              TextFieldComponent(
+                hintText: 'Email',
+                controller: _emailController,
+              ),
+              TextFieldComponent(
+                hintText: 'Şifre',
+                controller: _passwordController,
+                obscureText: true,
+              ),
               SizedBox(height: 20),
               ButtonComponent(
                 text: 'Kayıt Ol',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
                 onPressed: () {
-                  Navigator.pushNamed(context, '/map');
+                  _handleSignup(_email, _password, context);
                 },
               ),
               SizedBox(height: 10),
@@ -81,38 +138,6 @@ class Body extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class CheckBoxWidget extends StatefulWidget {
-  @override
-  _CheckBoxWidgetState createState() => _CheckBoxWidgetState();
-}
-
-class _CheckBoxWidgetState extends State<CheckBoxWidget> {
-  bool rememberMe = false;
-
-  void _onRememberMeChanged(bool newValue) => setState(() {
-        rememberMe = newValue;
-
-        if (rememberMe) {
-          // TODO: Here goes your functionality that remembers the user.
-        } else {
-          // TODO: Forget the user
-        }
-      });
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 24.0,
-      width: 24.0,
-      child: Checkbox(
-        checkColor: kPrimaryWhiteColor,
-        activeColor: kPrimaryDarkColor,
-        value: rememberMe,
-        onChanged: _onRememberMeChanged,
       ),
     );
   }

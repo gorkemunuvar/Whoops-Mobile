@@ -1,2 +1,2 @@
-
-
+ - logout ekle.
+ - whoop detail ekle. çünkü kullanıcı whoop'u silmek isteyeblir.
