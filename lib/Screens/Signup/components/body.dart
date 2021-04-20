@@ -1,63 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
+import 'package:notes_on_map/services/Networking.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:notes_on_map/Screens/SignUp/components/background.dart';
 import 'package:notes_on_map/components/button_component.dart';
 
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Body extends StatelessWidget {
-  Future<http.Response> post(dynamic body) {
-    return http.post(
-      'https://3760c477f05f.ngrok.io/signup',
-      body: json.encode(body),
-      headers: {'Content-Type': 'application/json; charset=UTF-8'},
-    );
-  }
+String signupUrl = 'https://537905f17df5.ngrok.io/signup';
 
+class Body extends StatelessWidget {
   void _handleSignup(
     String email,
     String password,
     BuildContext context,
   ) async {
-    dynamic body = {
+    Map<String, String> body = {
       'email': email,
       'password': password,
     };
 
     //Parametreler ile  POST isteği yap
-    http.Response response = await post(body);
+    http.Response response = await Networking.post(signupUrl, body);
 
     //Eğer başarılı ise Login Page' yönlendir
-    if (response.statusCode == 201)
+    if (response.statusCode == 201) {
+      print('Kayıt olma işlemi başarılı.');
       Navigator.pushNamed(context, '/signIn');
-
+    }
     //Hatalı sonuç döner ise uyarı ver.
     else
       print('${response.statusCode}. Bir hata ile karşılaştınız.');
   }
 
-  String _email = '';
-  String _password = '';
-
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  _printEmailValue() {
-    _email = _emailController.text;
-  }
-
-  _printPasswordValue() {
-    _password = _passwordController.text;
-  }
+  String _emailInput = '';
+  String _passwordInput = '';
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
-    _emailController.addListener(_printEmailValue);
-    _passwordController.addListener(_printPasswordValue);
 
     return Background(
       child: Padding(
@@ -82,11 +63,15 @@ class Body extends StatelessWidget {
               SizedBox(height: 20),
               TextFieldComponent(
                 hintText: 'Email',
-                controller: _emailController,
+                onChanged: (value) {
+                  _emailInput = value;
+                },
               ),
               TextFieldComponent(
                 hintText: 'Şifre',
-                controller: _passwordController,
+                onChanged: (value) {
+                  _passwordInput = value;
+                },
                 obscureText: true,
               ),
               SizedBox(height: 20),
@@ -95,7 +80,11 @@ class Body extends StatelessWidget {
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
                 onPressed: () {
-                  _handleSignup(_email, _password, context);
+                  _handleSignup(
+                    _emailInput,
+                    _passwordInput,
+                    context,
+                  );
                 },
               ),
               SizedBox(height: 10),

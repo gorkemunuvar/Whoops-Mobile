@@ -1,17 +1,14 @@
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class Networking {
-  void post(String url, String json) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json',
-    };
-
+  static Future<http.Response> post(String url, dynamic body) async {
     http.Response response = await http.post(
       url,
-      headers: headers,
-      body: json,
+      body: json.encode(body),
+      headers: {'Content-Type': 'application/json'},
     );
 
-    print('Response status: ${response.statusCode}');
+    return response;
   }
 }
