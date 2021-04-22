@@ -1,14 +1,66 @@
+import 'dart:convert';
 import 'background.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:notes_on_map/services/storage.dart';
+import 'package:notes_on_map/services/Networking.dart';
 import 'package:notes_on_map/components/button_component.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 
+import 'package:http/http.dart' as http;
+
 class Body extends StatelessWidget {
+  Future<bool> _isClientHasToken() async {
+    Storage tokenStorage = Storage();
+    Map<String, String> tokens = await tokenStorage.readTokens();
+
+    return tokens['status'] == 'has_token' ? false : true;
+  }
+
+  void _handleStorage() async {
+    //Storage'da access ve resfresh token var mı?
+
+    //Eğer token öncede kayıtlı ise expire olmuş mu?
+
+    //Expire olmuş ise refresh token ile yeniden access token al.
+
+    //Gelen yeni access token'ı storage'a yaz.
+
+    //Eğer token expire olmamışsa Home Page'e yönlendir.
+
+    //Önceden bir token kaydedilmemişse kullanıcı bilgilerini al.
+
+    //Post(email, password) isteği gönder.
+
+    //İşlem başarılı ise dönen tokenları al.
+
+    //Dönen token'ları storage'a kaydet.
+
+    //Home Page'e yönlendir.
+  }
+
+  Future<http.Response> _makePostRequest(String email, String password) async {
+    Map<String, String> body = {
+      'email': email,
+      'password': password,
+    };
+
+    http.Response response = await Networking.post('$kServerUrl/signin', body);
+
+    return response;
+  }
+
+  String _emailInput = '';
+  String _passwordInput = '';
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    //If it returns true, apply the logic.
+    _isClientHasToken().then((value) {
+      print(value);
+    });
 
     return Background(
       child: Padding(
@@ -22,8 +74,19 @@ class Body extends StatelessWidget {
                 height: size.height / 3,
               ),
               SvgPicture.asset('assets/images/logo.svg'),
-              TextFieldComponent(hintText: 'Kullanıcı adı'),
-              TextFieldComponent(hintText: 'Şifre', obscureText: true),
+              TextFieldComponent(
+                hintText: 'Email',
+                onChanged: (value) {
+                  _emailInput = value;
+                },
+              ),
+              TextFieldComponent(
+                hintText: 'Şifre',
+                obscureText: true,
+                onChanged: (value) {
+                  _passwordInput = value;
+                },
+              ),
               SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -59,8 +122,36 @@ class Body extends StatelessWidget {
                 text: 'Giriş',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
-                onPressed: () {
-                  Navigator.pushNamed(context, '/map');
+                onPressed: () async {
+                  http.Response response = await _makePostRequest(
+                    _emailInput,
+                    _passwordInput,
+                  );
+
+                  //If user logs in correctly
+                  if (response.statusCode == 201) {
+                    //Get tokens
+                    Map<String, dynamic> tokens =
+                        json.decode(response.body) as Map;
+
+                    print(tokens['access_token']);
+                    print(tokens['refresh_token']);
+
+                    Storage storage = Storage();
+                    storage
+                        .saveTokens(
+                          tokens['access_token'],
+                          tokens['refresh_token'],
+                        )
+                        .then((value) => Navigator.pushNamed(context, '/map'));
+                  } else if (response.statusCode == 401) {
+                    print('Wrong Credentials!');
+                  } else if (response.statusCode == 404) {
+                    print('User does not exist');
+                  } else {
+                    print('Something went wrong.');
+                    print('Status Code: ${response.statusCode}');
+                  }
                 },
               ),
               SizedBox(height: 10),

@@ -7,8 +7,6 @@ import 'package:notes_on_map/components/button_component.dart';
 
 import 'package:http/http.dart' as http;
 
-String signupUrl = 'https://537905f17df5.ngrok.io/signup';
-
 class Body extends StatelessWidget {
   void _handleSignup(
     String email,
@@ -21,7 +19,8 @@ class Body extends StatelessWidget {
     };
 
     //Parametreler ile  POST isteği yap
-    http.Response response = await Networking.post(signupUrl, body);
+    http.Response response =
+        await Networking.post('${kServerUrl}/signup', body);
 
     //Eğer başarılı ise Login Page' yönlendir
     if (response.statusCode == 201) {
