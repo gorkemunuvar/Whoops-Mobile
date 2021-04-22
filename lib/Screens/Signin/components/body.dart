@@ -4,51 +4,103 @@ import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notes_on_map/services/storage.dart';
-import 'package:notes_on_map/services/Networking.dart';
 import 'package:notes_on_map/components/button_component.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Body extends StatelessWidget {
-  Future<bool> _isClientHasToken() async {
+  Future<Map<String, String>> _getTokens() async {
     Storage tokenStorage = Storage();
     Map<String, String> tokens = await tokenStorage.readTokens();
 
-    return tokens['status'] == 'has_token' ? false : true;
+    return tokens;
   }
 
-  void _handleStorage() async {
-    //Storage'da access ve resfresh token var mı?
+  void _handleStorageTokens(BuildContext context) {
+    _getTokens().then((value) {
+      //If user logged in before get the token from local storage
+      if (value['status'] == 'has_token') {
+        String accessToken = value['whoops_access_token'];
 
-    //Eğer token öncede kayıtlı ise expire olmuş mu?
+        //Check if the tokens has expired
+        bool isTokenExpired = JwtDecoder.isExpired(accessToken);
 
-    //Expire olmuş ise refresh token ile yeniden access token al.
+        //Get a new  access token using refresh token
+        if (isTokenExpired) {
+          String refreshToken = value['whoops_refresh_token'];
 
-    //Gelen yeni access token'ı storage'a yaz.
+          final headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer $refreshToken',
+          };
 
-    //Eğer token expire olmamışsa Home Page'e yönlendir.
+          http
+              //send bearer to /token/refresh endpoint
+              .post('$kServerUrl/token/refresh', headers: headers)
+              .then((value) async {
+            http.Response response = value;
+            if (response.statusCode == 200) {
+              Map<String, dynamic> map = json.decode(response.body) as Map;
 
-    //Önceden bir token kaydedilmemişse kullanıcı bilgilerini al.
+              //Save the new(refreshed) access token
+              await Storage().saveAccessToken(map['access_token']);
 
-    //Post(email, password) isteği gönder.
+              Navigator.pushNamed(context, '/map');
+            }
+          });
+        }
+        //If token has not expired, handle sign in
+        else {
+          Navigator.pushNamed(context, '/map');
 
-    //İşlem başarılı ise dönen tokenları al.
-
-    //Dönen token'ları storage'a kaydet.
-
-    //Home Page'e yönlendir.
+          //Also add the token to states
+          //It is going to be used for sending requests to
+          //secure endpoints and loggin out functionality.
+        }
+      }
+    });
   }
 
-  Future<http.Response> _makePostRequest(String email, String password) async {
+  void _handleServerTokens(BuildContext context) async {
+    //Get email and password info from text fields
     Map<String, String> body = {
-      'email': email,
-      'password': password,
+      'email': _emailInput,
+      'password': _passwordInput,
     };
 
-    http.Response response = await Networking.post('$kServerUrl/signin', body);
+    //Make a post request with user info
+    http.Response response = await http.post(
+      '$kServerUrl/signin',
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(body),
+    );
 
-    return response;
+    //If user logs in correctly
+    if (response.statusCode == 201) {
+      //Get access and refresh token from the server
+      Map<String, dynamic> tokens = json.decode(response.body) as Map;
+
+      //Save tokens to phone's local storage
+      //And then whenever this screen is run, _handleStorageTokens() func.
+      //will check the tokens and will forward to Home Screen without
+      //asking for any info from the user.
+      Storage()
+          .saveTokens(
+            tokens['access_token'],
+            tokens['refresh_token'],
+          )
+          .then((value) => Navigator.pushNamed(context, '/map'));
+    } else if (response.statusCode == 401) {
+      print('Wrong Credentials!');
+    } else if (response.statusCode == 404) {
+      print('User does not exist');
+    } else {
+      print('Something went wrong.');
+      print('Status Code: ${response.statusCode}');
+    }
   }
 
   String _emailInput = '';
@@ -56,12 +108,9 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    //If it returns true, apply the logic.
-    _isClientHasToken().then((value) {
-      print(value);
-    });
+    _handleStorageTokens(context);
 
+    Size size = MediaQuery.of(context).size;
     return Background(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 45.0),
@@ -122,36 +171,8 @@ class Body extends StatelessWidget {
                 text: 'Giriş',
                 textColor: kPrimaryWhiteColor,
                 backgroundColor: kPrimaryDarkColor,
-                onPressed: () async {
-                  http.Response response = await _makePostRequest(
-                    _emailInput,
-                    _passwordInput,
-                  );
-
-                  //If user logs in correctly
-                  if (response.statusCode == 201) {
-                    //Get tokens
-                    Map<String, dynamic> tokens =
-                        json.decode(response.body) as Map;
-
-                    print(tokens['access_token']);
-                    print(tokens['refresh_token']);
-
-                    Storage storage = Storage();
-                    storage
-                        .saveTokens(
-                          tokens['access_token'],
-                          tokens['refresh_token'],
-                        )
-                        .then((value) => Navigator.pushNamed(context, '/map'));
-                  } else if (response.statusCode == 401) {
-                    print('Wrong Credentials!');
-                  } else if (response.statusCode == 404) {
-                    print('User does not exist');
-                  } else {
-                    print('Something went wrong.');
-                    print('Status Code: ${response.statusCode}');
-                  }
+                onPressed: () {
+                  _handleServerTokens(context);
                 },
               ),
               SizedBox(height: 10),

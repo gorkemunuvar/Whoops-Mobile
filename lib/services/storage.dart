@@ -6,10 +6,10 @@ class Storage {
 
     // If the exp1 is not-null, returns its value, otherwise returns 0.
     final accessToken = prefs.getString('whoops_access_token') ?? '0';
-    final refreshToken = prefs.getString('whoops_refresh_toekn') ?? '0';
+    final refreshToken = prefs.getString('whoops_refresh_token') ?? '0';
 
-    String status = 'has_token';
-    if (accessToken != '0' && refreshToken != '0') status = 'has_not_token';
+    String status = 'has_not_token';
+    if (accessToken != '0' && refreshToken != '0') status = 'has_token';
 
     Map<String, String> tokens = {
       'status': status.toString(),

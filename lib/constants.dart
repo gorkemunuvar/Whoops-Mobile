@@ -5,4 +5,4 @@ const kPrimaryWhiteColor = Color(0xFFFBFAF5);
 const kPrimaryDarkColor = Color(0xFF0E1111);
 
 //Utilities
-const String kServerUrl = 'https://5fae49e83f2e.ngrok.io';
+const String kServerUrl = 'https://f50d34e0e443.ngrok.io';
