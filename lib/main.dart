@@ -1,20 +1,28 @@
 import 'routing.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/auth_token_provider.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Whoops',
-      onGenerateRoute: Routing.generateRoute,
-      theme: ThemeData(
-        canvasColor: Colors.transparent,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthTokenProvider>(
+          create: (context) => AuthTokenProvider(),
+        )
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Whoops',
+        onGenerateRoute: Routing.generateRoute,
+        theme: ThemeData(
+          canvasColor: Colors.transparent,
+        ),
+        initialRoute: '/signIn',
       ),
-      initialRoute: '/signIn',
     );
   }
 }

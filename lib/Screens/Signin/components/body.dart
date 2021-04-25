@@ -1,10 +1,12 @@
 import 'dart:convert';
 import 'background.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:notes_on_map/services/storage.dart';
 import 'package:notes_on_map/components/button_component.dart';
+import 'package:notes_on_map/providers/auth_token_provider.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 
 import 'package:http/http.dart' as http;
@@ -23,14 +25,13 @@ class Body extends StatelessWidget {
       //If user logged in before get the token from local storage
       if (value['status'] == 'has_token') {
         String accessToken = value['whoops_access_token'];
+        String refreshToken = value['whoops_refresh_token'];
 
         //Check if the tokens has expired
         bool isTokenExpired = JwtDecoder.isExpired(accessToken);
 
         //Get a new  access token using refresh token
         if (isTokenExpired) {
-          String refreshToken = value['whoops_refresh_token'];
-
           final headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -45,8 +46,10 @@ class Body extends StatelessWidget {
             if (response.statusCode == 200) {
               Map<String, dynamic> map = json.decode(response.body) as Map;
 
+              accessToken = map['access_token'];
+
               //Save the new(refreshed) access token
-              await Storage().saveAccessToken(map['access_token']);
+              await Storage().saveAccessToken(accessToken);
 
               Navigator.pushNamed(context, '/map');
             }
@@ -60,6 +63,13 @@ class Body extends StatelessWidget {
           //It is going to be used for sending requests to
           //secure endpoints and loggin out functionality.
         }
+
+        //Device has tokens anyway in this scope
+        //Update tokens for AuthTokenProvider then.
+        Provider.of<AuthTokenProvider>(context, listen: false)
+            .updateAccessToken(accessToken);
+        Provider.of<AuthTokenProvider>(context, listen: false)
+            .updateRefreshToken(refreshToken);
       }
     });
   }
@@ -89,10 +99,17 @@ class Body extends StatelessWidget {
       //asking for any info from the user.
       Storage()
           .saveTokens(
-            tokens['access_token'],
-            tokens['refresh_token'],
-          )
-          .then((value) => Navigator.pushNamed(context, '/map'));
+        tokens['access_token'],
+        tokens['refresh_token'],
+      )
+          .then((value) {
+        Provider.of<AuthTokenProvider>(context, listen: false)
+            .updateAccessToken(tokens['access_token']);
+        Provider.of<AuthTokenProvider>(context, listen: false)
+            .updateRefreshToken(tokens['refresh_token']);
+
+        Navigator.pushNamed(context, '/map');
+      });
     } else if (response.statusCode == 401) {
       print('Wrong Credentials!');
     } else if (response.statusCode == 404) {

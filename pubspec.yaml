@@ -38,6 +38,7 @@ dependencies:
   rxdart: ^0.26.0
   shared_preferences: ^2.0.5
   jwt_decoder: ^2.0.1
+  provider: ^5.0.0
 
 dev_dependencies:
   flutter_test:
