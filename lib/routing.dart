@@ -49,7 +49,7 @@ class Routing {
             appBar: AppBar(),
             body: Center(
               child: Text(
-                'Ters giden birşeyler oldu',
+                'Ters giden birşeyler oldu\nMuhtemelen route ismi yanlış.',
                 style: TextStyle(color: Colors.white),
               ),
             ),

@@ -20,57 +20,96 @@ class Body extends StatelessWidget {
     return tokens;
   }
 
+  Future<bool> _isTokenBlacklisted(String accessToken) async {
+    Map<String, String> body = {'access_token': accessToken};
+
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    http.Response response = await http.post(
+      '$kServerUrl/token/is_token_blacklisted',
+      headers: headers,
+      body: json.encode(body),
+    );
+
+    print('_isTokenBlacklisted() func. STATUS CODE = ${response.statusCode}');
+
+    if (response.statusCode == 200) return true;
+    return false;
+  }
+
+  //I dont check whether if the token is in the blacklist. This is a problem
   void _handleStorageTokens(BuildContext context) {
-    _getTokens().then((value) {
+    _getTokens().then((value) async {
       //If user logged in before get the token from local storage
       if (value['status'] == 'has_token') {
         String accessToken = value['whoops_access_token'];
         String refreshToken = value['whoops_refresh_token'];
+
+        print('Device has token.');
+        print('Acces Token: $accessToken');
+        print('Refresh Token: $refreshToken');
+
+        bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
+
+        //Do not let user login
+        if (isTokenBlacklisted) {
+          print('Token was blacklisted.');
+          return;
+        } else {
+          print('Token was NOT blacklisted');
+        }
 
         //Check if the tokens has expired
         bool isTokenExpired = JwtDecoder.isExpired(accessToken);
 
         //Get a new  access token using refresh token
         if (isTokenExpired) {
+          print('TOKEN EXPIRED');
+
           final headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
             'Authorization': 'Bearer $refreshToken',
           };
 
-          http
-              //send bearer to /token/refresh endpoint
-              .post('$kServerUrl/token/refresh', headers: headers)
-              .then((value) async {
-            http.Response response = value;
-            if (response.statusCode == 200) {
-              Map<String, dynamic> map = json.decode(response.body) as Map;
+          //send bearer to /token/refresh endpoint
+          http.Response response = await http.post(
+            '$kServerUrl/token/refresh',
+            headers: headers,
+          );
 
-              accessToken = map['access_token'];
+          if (response.statusCode == 200) {
+            Map<String, dynamic> map = json.decode(response.body) as Map;
 
-              //Save the new(refreshed) access token
-              await Storage().saveAccessToken(accessToken);
+            accessToken = map['access_token'];
 
-              Navigator.pushNamed(context, '/map');
-            }
-          });
+            //Save the new(refreshed) access token
+            await Storage().saveAccessToken(accessToken);
+
+            print('TOKEN REFRESHED');
+
+            Navigator.pushNamed(context, '/map');
+          } else {
+            print('Something went wrong while POST/token/refresh');
+            print('Status Code: ${response.statusCode}');
+          }
         }
-        //If token has not expired, handle sign in
+        // If token is not expired.
         else {
+          //Device has tokens anyway in this scope
+          //Update tokens for AuthTokenProvider then.
+          Provider.of<AuthTokenProvider>(context, listen: false)
+              .updateAccessToken(accessToken);
+          Provider.of<AuthTokenProvider>(context, listen: false)
+              .updateRefreshToken(refreshToken);
+
           Navigator.pushNamed(context, '/map');
-
-          //Also add the token to states
-          //It is going to be used for sending requests to
-          //secure endpoints and loggin out functionality.
         }
-
-        //Device has tokens anyway in this scope
-        //Update tokens for AuthTokenProvider then.
-        Provider.of<AuthTokenProvider>(context, listen: false)
-            .updateAccessToken(accessToken);
-        Provider.of<AuthTokenProvider>(context, listen: false)
-            .updateRefreshToken(refreshToken);
-      }
+      } else
+        print('Device has not token.');
     });
   }
 
@@ -125,6 +164,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    //Create a future builder to render after an async call
     _handleStorageTokens(context);
 
     Size size = MediaQuery.of(context).size;
