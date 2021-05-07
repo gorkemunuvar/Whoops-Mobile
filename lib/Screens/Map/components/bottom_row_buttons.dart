@@ -47,6 +47,7 @@ class BottomRowButtons extends StatelessWidget {
             ),
             onPressed: () {
               showModalBottomSheet(
+                isScrollControlled: true,
                 context: context,
                 builder: (BuildContext context) {
                   return BottomSheetModal();

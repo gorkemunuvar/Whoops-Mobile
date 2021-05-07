@@ -3,7 +3,7 @@ import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:notes_on_map/services/StreamSocket.dart';
+import 'package:notes_on_map/services/stream_socket.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 StreamSocket streamSocket = StreamSocket();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
-import 'package:notes_on_map/services/Networking.dart';
+import 'package:notes_on_map/services/networking.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:notes_on_map/Screens/SignUp/components/background.dart';
 import 'package:notes_on_map/components/button_component.dart';

@@ -36,6 +36,8 @@ class Body extends StatelessWidget {
 
     print('_isTokenBlacklisted() func. STATUS CODE = ${response.statusCode}');
 
+    //200 means token is blacklisted
+    //404 means token is not blacklisted
     if (response.statusCode == 200) return true;
     return false;
   }
@@ -54,9 +56,12 @@ class Body extends StatelessWidget {
 
         bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
 
-        //Do not let user login
         if (isTokenBlacklisted) {
           print('Token was blacklisted.');
+
+          //Do not let user login
+
+          print('NOT LOGGED IN');
           return;
         } else {
           print('Token was NOT blacklisted');
@@ -91,6 +96,7 @@ class Body extends StatelessWidget {
 
             print('TOKEN REFRESHED');
 
+            print('LOGGED IN');
             Navigator.pushNamed(context, '/map');
           } else {
             print('Something went wrong while POST/token/refresh');
@@ -106,6 +112,7 @@ class Body extends StatelessWidget {
           Provider.of<AuthTokenProvider>(context, listen: false)
               .updateRefreshToken(refreshToken);
 
+          print('LOGGED IN');
           Navigator.pushNamed(context, '/map');
         }
       } else
@@ -147,6 +154,7 @@ class Body extends StatelessWidget {
         Provider.of<AuthTokenProvider>(context, listen: false)
             .updateRefreshToken(tokens['refresh_token']);
 
+        print('LOGGED IN');
         Navigator.pushNamed(context, '/map');
       });
     } else if (response.statusCode == 401) {
