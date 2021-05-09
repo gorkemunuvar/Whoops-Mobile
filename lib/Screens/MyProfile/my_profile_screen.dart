@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:notes_on_map/providers/auth_token_provider.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:notes_on_map/services/auth_service.dart';
 
 class MyProfileScreen extends StatelessWidget {
   @override
@@ -17,18 +18,12 @@ class MyProfileScreen extends StatelessWidget {
     );
   }
 
+  //Expire süresi 15. dk. Login olunca 15 dk geçtikten sonra logout olunmaya çalışılırsa
+  //hata veriyor olabilir. Çünkü /logout endpointinde @jwt_required() decorator çalıştığı için
+  //auth. işlemi expire olmuş access token kabul etmiyor.
+  //Çözüm: Logout olmadan önce refresh token ile yeni bir access token üretmek.
   Future<void> _handleLogout(BuildContext context, String accessToken) async {
-    final headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
-    //Make a post request with user info
-    http.Response response = await http.post(
-      '$kServerUrl/logout',
-      headers: headers,
-    );
+    http.Response response = await AuthService.logout(accessToken);
 
     if (response.statusCode == 200) {
       print('User logged out.');

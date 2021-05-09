@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:notes_on_map/components/button_component.dart';
@@ -6,9 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:notes_on_map/services/whoop_service.dart';
 import 'package:notes_on_map/modals/whoop_modal.dart';
 
+import 'package:provider/provider.dart';
+import 'package:notes_on_map/providers/auth_token_provider.dart';
+
 int _whoopTime;
 String _whoopTitle;
 String _tags;
+
+Random random = Random();
 
 class BottomSheetModal extends StatelessWidget {
   @override
@@ -58,23 +64,33 @@ class BottomSheetModal extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-              child: ButtonComponent(
-                text: 'Paylaş',
-                textColor: kPrimaryWhiteColor,
-                backgroundColor: kPrimaryDarkColor,
-                onPressed: () {
-                  Whoop whoop = Whoop(
-                    _whoopTitle,
-                    35.7589,
-                    45.6982,
-                    _whoopTime,
-                  );
+              child: Consumer<AuthTokenProvider>(
+                  builder: (context, tokenData, child) {
+                return ButtonComponent(
+                  text: 'Paylaş',
+                  textColor: kPrimaryWhiteColor,
+                  backgroundColor: kPrimaryDarkColor,
+                  onPressed: () {
+                    double rndLatitude = random.nextDouble() * 100;
+                    double rndLongitude = random.nextDouble() * 100;
 
-                  WhoopService.share(whoop);
+                    if (rndLatitude > 90.0) rndLatitude = 90.0;
+                    if (rndLongitude > 90.0) rndLongitude = 90.0;
 
-                  Navigator.pop(context);
-                },
-              ),
+                    Whoop whoop = Whoop(
+                      _whoopTitle,
+                      rndLatitude,
+                      rndLongitude,
+                      _whoopTime,
+                    );
+
+                    String accessToken = tokenData.accessToken;
+                    WhoopService.share(whoop, accessToken);
+
+                    Navigator.pop(context);
+                  },
+                );
+              }),
             ),
           ],
         ),

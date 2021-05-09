@@ -6,16 +6,15 @@ import 'package:http/http.dart' as http;
 String _url = '$kServerUrl/whoop/share';
 
 class WhoopService {
-  static void share(Whoop whoop) {
+  static void share(Whoop whoop, String accessToken) {
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      //'Authorization': 'Bearer $accessToken',
+      'Authorization': 'Bearer $accessToken',
     };
 
     Map<String, dynamic> body = {
-      'nick': 'görkem',
-      'note': whoop.whoopTitle,
+      'whoop_title': whoop.whoopTitle,
       'latitude': whoop.latitude,
       'longitude': whoop.longitude,
       'time': whoop.time,
@@ -23,6 +22,7 @@ class WhoopService {
 
     http.post(_url, headers: headers, body: json.encode(body)).then((response) {
       print('WhoopServise.share() STATUS CODE:${response.statusCode}');
+      print(response.body);
     });
   }
 }

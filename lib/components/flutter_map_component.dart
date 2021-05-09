@@ -6,12 +6,14 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:notes_on_map/services/stream_socket.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
+import 'package:notes_on_map/modals/whoop_modal.dart';
+
 StreamSocket streamSocket = StreamSocket();
 
 class FlutterMapComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    streamSocket.listen('https://566471b2dd4e.ngrok.io');
+    streamSocket.listen(kServerUrl);
 
     final PopupController _popupController = PopupController();
 
@@ -27,16 +29,20 @@ class FlutterMapComponent extends StatelessWidget {
                 return Center(child: Text('snapshot.hasError'));
               } else {
                 if (snapshot.data != null) {
-                  var data = jsonDecode(snapshot.data)["notes"] as List;
+                  var whoopData = jsonDecode(snapshot.data)['whoops'] as List;
 
                   List<Marker> markers = [];
+                  //List<Whoop> whoops = [];
 
-                  for (var item in data) {
+                  for (var item in whoopData) {
                     double latitude = double.parse(item['latitude']);
                     double longitude = double.parse(item['longitude']);
+                    //String whoopTitle = item['whoop_title'];
+                    //int time = int.parse(item['time']);
+
+                    //Whoop whoop = Whoop(whoopTitle, latitude, longitude, time);
 
                     LatLng latLng = LatLng(latitude, longitude);
-
                     Marker marker = Marker(
                       anchorPos: AnchorPos.align(AnchorAlign.center),
                       height: 30,
@@ -46,9 +52,8 @@ class FlutterMapComponent extends StatelessWidget {
                     );
 
                     markers.add(marker);
+                    //whoops.add(whoop);
                   }
-
-                  print(markers.length);
 
                   return _FlutterMapWidget(
                     markers: markers,
@@ -61,8 +66,6 @@ class FlutterMapComponent extends StatelessWidget {
                 markers: [],
                 popupController: _popupController,
               );
-
-              //return Center(child: Text('No data right now.'));
             },
           ),
         ),

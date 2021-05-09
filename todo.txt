@@ -1,2 +1,3 @@
- - logout ekle.
- - whoop detail ekle. çünkü kullanıcı whoop'u silmek isteyeblir.
+ [my_profile_screen.dart] -> logout problemi var. yorumlarda sebebi yazıyor. 
+ [flutter_map_component]  -> markerlara özel pop uplar ile her marker'a ait whoopların açılmasını sağla.
+                             Yardımcı link: https://medium.com/zipper-studios/flutter-map-custom-and-dynamic-popup-over-the-marker-732d26ef9bc7

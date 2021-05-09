@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:convert';
 import 'background.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,20 @@ class Body extends StatelessWidget {
     return false;
   }
 
+  Future<bool> checkConnection() async {
+    bool flag;
+
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      //This line means device is connected.
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) flag = true;
+    } on SocketException catch (_) {
+      flag = false;
+    }
+
+    return flag;
+  }
+
   //I dont check whether if the token is in the blacklist. This is a problem
   void _handleStorageTokens(BuildContext context) {
     _getTokens().then((value) async {
@@ -54,57 +69,62 @@ class Body extends StatelessWidget {
         print('Acces Token: $accessToken');
         print('Refresh Token: $refreshToken');
 
-        bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
+        bool netConnectionState = await checkConnection();
 
-        if (isTokenBlacklisted) {
-          print('Token was blacklisted.');
-
-          //Do not let user login
-
-          print('NOT LOGGED IN');
+        if (!netConnectionState) {
+          print('There is no connection');
           return;
+          //If devices has connection
         } else {
-          print('Token was NOT blacklisted');
-        }
+          print('There is connection');
 
-        //Check if the tokens has expired
-        bool isTokenExpired = JwtDecoder.isExpired(accessToken);
+          bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
 
-        //Get a new  access token using refresh token
-        if (isTokenExpired) {
-          print('TOKEN EXPIRED');
+          if (isTokenBlacklisted) {
+            print('Token was blacklisted.');
 
-          final headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer $refreshToken',
-          };
-
-          //send bearer to /token/refresh endpoint
-          http.Response response = await http.post(
-            '$kServerUrl/token/refresh',
-            headers: headers,
-          );
-
-          if (response.statusCode == 200) {
-            Map<String, dynamic> map = json.decode(response.body) as Map;
-
-            accessToken = map['access_token'];
-
-            //Save the new(refreshed) access token
-            await Storage().saveAccessToken(accessToken);
-
-            print('TOKEN REFRESHED');
-
-            print('LOGGED IN');
-            Navigator.pushNamed(context, '/map');
+            //Do not let user login
+            print('NOT LOGGED IN');
+            return;
           } else {
-            print('Something went wrong while POST/token/refresh');
-            print('Status Code: ${response.statusCode}');
+            print('Token was NOT blacklisted');
           }
-        }
-        // If token is not expired.
-        else {
+
+          //Check if the tokens has expired
+          bool isTokenExpired = JwtDecoder.isExpired(accessToken);
+
+          //Get a new  access token using refresh token
+          if (isTokenExpired) {
+            print('TOKEN EXPIRED');
+
+            final headers = {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer $refreshToken',
+            };
+
+            //send bearer to /token/refresh endpoint
+            http.Response response = await http.post(
+              '$kServerUrl/token/refresh',
+              headers: headers,
+            );
+
+            if (response.statusCode == 200) {
+              Map<String, dynamic> map = json.decode(response.body) as Map;
+
+              accessToken = map['access_token'];
+
+              //Save the new(refreshed) access token
+              await Storage().saveAccessToken(accessToken);
+
+              print('TOKEN REFRESHED');
+            } else {
+              print('Something went wrong while POST/token/refresh');
+              print('Status Code: ${response.statusCode}');
+              return;
+            }
+          }
+
           //Device has tokens anyway in this scope
           //Update tokens for AuthTokenProvider then.
           Provider.of<AuthTokenProvider>(context, listen: false)
