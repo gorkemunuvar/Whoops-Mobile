@@ -71,11 +71,11 @@ class BottomSheetModal extends StatelessWidget {
                   textColor: kPrimaryWhiteColor,
                   backgroundColor: kPrimaryDarkColor,
                   onPressed: () {
-                    double rndLatitude = random.nextDouble() * 100;
-                    double rndLongitude = random.nextDouble() * 100;
+                    double rndLatitude = random.nextDouble() * 100 / 2;
+                    double rndLongitude = random.nextDouble() * 100 / 2;
 
-                    if (rndLatitude > 90.0) rndLatitude = 90.0;
-                    if (rndLongitude > 90.0) rndLongitude = 90.0;
+                    if (rndLatitude > 90.0) rndLatitude = 45.0;
+                    if (rndLongitude > 90.0) rndLongitude = 45.0;
 
                     Whoop whoop = Whoop(
                       _whoopTitle,

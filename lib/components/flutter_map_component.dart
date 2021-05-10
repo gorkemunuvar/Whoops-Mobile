@@ -37,18 +37,20 @@ class FlutterMapComponent extends StatelessWidget {
                   for (var item in whoopData) {
                     double latitude = double.parse(item['latitude']);
                     double longitude = double.parse(item['longitude']);
-                    //String whoopTitle = item['whoop_title'];
+                    String whoopTitle = item['whoop_title'];
                     //int time = int.parse(item['time']);
 
                     //Whoop whoop = Whoop(whoopTitle, latitude, longitude, time);
 
                     LatLng latLng = LatLng(latitude, longitude);
+
                     Marker marker = Marker(
                       anchorPos: AnchorPos.align(AnchorAlign.center),
-                      height: 30,
-                      width: 30,
-                      point: latLng,
-                      builder: (ctx) => Icon(Icons.pin_drop),
+                      height: 40.0,
+                      width: 200.0,
+                      point: LatLng(latitude, longitude),
+                      builder: (ctx) =>
+                          _CustomMarkerContent(whoopTitle: whoopTitle),
                     );
 
                     markers.add(marker);
@@ -74,12 +76,18 @@ class FlutterMapComponent extends StatelessWidget {
   }
 }
 
-class _FlutterMapWidget extends StatelessWidget {
+class _FlutterMapWidget extends StatefulWidget {
   final List<Marker> markers;
   final PopupController popupController;
+  final Function onTappedMarker;
 
-  _FlutterMapWidget({this.markers, this.popupController});
+  _FlutterMapWidget({this.markers, this.popupController, this.onTappedMarker});
 
+  @override
+  __FlutterMapWidgetState createState() => __FlutterMapWidgetState();
+}
+
+class __FlutterMapWidgetState extends State<_FlutterMapWidget> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
@@ -92,7 +100,7 @@ class _FlutterMapWidget extends StatelessWidget {
         ],
         onTap: (_) =>
             // Hide popup when the map is tapped.
-            popupController.hidePopup(),
+            widget.popupController.hidePopup(),
       ),
       layers: [
         TileLayerOptions(
@@ -107,53 +115,106 @@ class _FlutterMapWidget extends StatelessWidget {
           fitBoundsOptions: FitBoundsOptions(
             padding: EdgeInsets.all(50),
           ),
-          markers: markers,
+          markers: widget.markers,
           polygonOptions: PolygonOptions(
             borderColor: kPrimaryDarkColor,
             color: kPrimaryDarkColor,
             borderStrokeWidth: 2,
           ),
-          popupOptions: PopupOptions(
+          /* popupOptions: PopupOptions(
             popupSnap: PopupSnap.top,
             popupController: popupController,
             popupBuilder: (_, marker) => _PopupWidget(),
-          ),
+          ), */
           builder: (context, markers) {
             return FloatingActionButton(
               child: Text(markers.length.toString()),
               onPressed: null,
             );
           },
-        ),
+        )
       ],
     );
   }
 }
 
+class _CustomMarkerContent extends StatefulWidget {
+  final String whoopTitle;
+
+  _CustomMarkerContent({this.whoopTitle});
+
+  @override
+  __CustomMarkerContentState createState() => __CustomMarkerContentState();
+}
+
+class __CustomMarkerContentState extends State<_CustomMarkerContent> {
+  bool infoWindowVisible = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          infoWindowVisible = !infoWindowVisible;
+        });
+      },
+      child: Stack(
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: marker(),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: popup(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Icon marker() {
+    return Icon(
+      Icons.pin_drop,
+      size: 30.0,
+    );
+  }
+
+  Visibility popup() {
+    return Visibility(
+      visible: infoWindowVisible,
+      child: _PopupWidget(whoopTitle: widget.whoopTitle),
+    );
+  }
+}
+
 class _PopupWidget extends StatelessWidget {
+  final String whoopTitle;
+
+  _PopupWidget({this.whoopTitle});
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
       //color: kPrimaryWhiteColor,
       decoration: BoxDecoration(
-        color: kPrimaryWhiteColor,
+        color: kPrimaryDarkColor,
         border: Border.all(
           color: kPrimaryWhiteColor,
         ),
         borderRadius: BorderRadius.all(Radius.circular(10)),
       ),
-      //height: 80,
-      child: GestureDetector(
-        onTap: () => debugPrint("Popup tap!"),
-        child: Padding(
-          padding: EdgeInsets.all(3.0),
-          child: Text(
-            "I'm gonna leave a note here comming soon...",
-            style: TextStyle(
-              fontSize: 10,
-              fontFamily: 'Robott',
-            ),
+      child: Padding(
+        padding: EdgeInsets.all(5.0),
+        child: Text(
+          whoopTitle.length <= 50
+              ? whoopTitle
+              : '${whoopTitle.substring(0, 49)}...',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: kPrimaryWhiteColor,
+            fontSize: 13,
+            fontFamily: 'Robott',
           ),
         ),
       ),
