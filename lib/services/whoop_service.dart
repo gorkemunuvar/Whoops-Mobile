@@ -14,7 +14,7 @@ class WhoopService {
     };
 
     Map<String, dynamic> body = {
-      'whoop_title': whoop.whoopTitle,
+      'title': whoop.whoopTitle,
       'latitude': whoop.latitude,
       'longitude': whoop.longitude,
       'time': whoop.time,

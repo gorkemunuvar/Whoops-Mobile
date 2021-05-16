@@ -31,13 +31,15 @@ class FlutterMapComponent extends StatelessWidget {
                 if (snapshot.data != null) {
                   var whoopData = jsonDecode(snapshot.data)['whoops'] as List;
 
+                  print(whoopData);
+
                   List<Marker> markers = [];
                   //List<Whoop> whoops = [];
 
                   for (var item in whoopData) {
-                    double latitude = double.parse(item['latitude']);
-                    double longitude = double.parse(item['longitude']);
-                    String whoopTitle = item['whoop_title'];
+                    double latitude = item['latitude'];
+                    double longitude = item['longitude'];
+                    String whoopTitle = item['title'];
                     //int time = int.parse(item['time']);
 
                     //Whoop whoop = Whoop(whoopTitle, latitude, longitude, time);
