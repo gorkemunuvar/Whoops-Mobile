@@ -3,9 +3,19 @@ import 'package:flutter/material.dart';
 
 class WhoopCard extends StatelessWidget {
   final String title;
+  final String location;
+  final String date;
+  final String time;
+  //final String categories;
   final bool haveProfilePicture;
 
-  WhoopCard({this.title, this.haveProfilePicture = true});
+  WhoopCard({
+    this.title,
+    this.location,
+    this.date,
+    this.time,
+    this.haveProfilePicture = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +61,7 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Sokak müziğimize katıl!',
+                      title,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -62,19 +72,19 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.location_on),
-                    Text(title),
+                    Text(location),
                   ],
                 ),
                 Row(
                   children: [
                     Icon(Icons.date_range),
-                    Text('19 Nisan'),
+                    Text(date),
                   ],
                 ),
                 Row(
                   children: [
                     Icon(Icons.timer),
-                    Text('13:55 - 16:00'),
+                    Text(time),
                   ],
                 ),
                 Row(

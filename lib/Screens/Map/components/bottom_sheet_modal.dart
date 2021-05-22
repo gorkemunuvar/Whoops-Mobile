@@ -5,7 +5,7 @@ import 'package:notes_on_map/components/button_component.dart';
 import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:notes_on_map/services/whoop_service.dart';
-import 'package:notes_on_map/modals/whoop_modal.dart';
+import 'package:notes_on_map/models/whoop_model.dart';
 
 import 'package:provider/provider.dart';
 import 'package:notes_on_map/providers/auth_token_provider.dart';

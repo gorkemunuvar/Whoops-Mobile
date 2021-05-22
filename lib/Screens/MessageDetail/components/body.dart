@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
-import 'package:notes_on_map/modals/chat_message_model.dart';
+import 'package:notes_on_map/models/chat_message_model.dart';
 
 List<ChatMessage> messages = [
   ChatMessage(

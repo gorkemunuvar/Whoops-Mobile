@@ -4,6 +4,13 @@ import 'package:notes_on_map/components/whoop_card.dart';
 import 'package:notes_on_map/components/circle_avatar_component.dart';
 import 'package:notes_on_map/components/flutter_map_component.dart';
 
+import 'package:provider/provider.dart';
+import 'package:notes_on_map/services/user_service.dart';
+import 'package:notes_on_map/providers/auth_token_provider.dart';
+
+import 'package:notes_on_map/models/user_model.dart';
+import 'package:notes_on_map/models/whoop_model.dart';
+
 class ProfileScreenBody extends StatefulWidget {
   @override
   _ProfileScreenBodyState createState() => _ProfileScreenBodyState();
@@ -16,23 +23,37 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          backgroundColor: kPrimaryWhiteColor,
-          pinned: _pinned,
-          snap: _snap,
-          floating: _floating,
-          expandedHeight: 350.0,
-          flexibleSpace: _buildFlexibleSpaceBar(),
-        ),
-        _buildSliverList(),
-      ],
+    return Consumer<AuthTokenProvider>(
+      builder: (context, tokenData, child) {
+        return FutureBuilder(
+          future: UserService.getMyProfileUser(tokenData.accessToken),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    backgroundColor: kPrimaryWhiteColor,
+                    pinned: _pinned,
+                    snap: _snap,
+                    floating: _floating,
+                    expandedHeight: 350.0,
+                    flexibleSpace: _buildFlexibleSpaceBar(
+                      snapshot.data.whoops.length,
+                    ),
+                  ),
+                  _buildSliverList(snapshot.data.whoops),
+                ],
+              );
+            } else if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(child: CircularProgressIndicator());
+          },
+        );
+      },
     );
   }
 
   //Flexible component for CustomScrollView
-  Widget _buildFlexibleSpaceBar() {
+  Widget _buildFlexibleSpaceBar(int whoopsCount) {
     return FlexibleSpaceBar(
       background: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -41,14 +62,14 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
           _ProfileMapComponent(),
           SizedBox(height: 10),
           //Info column
-          _ProfileInfoComponent(),
+          _ProfileInfoComponent(whoopsCount: whoopsCount),
         ],
       ),
     );
   }
 
   //List of Whoop Cards
-  Widget _buildSliverList() {
+  Widget _buildSliverList(List<Whoop> whoops) {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
@@ -56,13 +77,18 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
             color: kPrimaryWhiteColor,
             child: Center(
               child: WhoopCard(
-                title: index.toString(),
+                title: whoops[index].title,
+                location: whoops[index].latitude.toString().substring(0, 5) +
+                    ' - ' +
+                    whoops[index].longitude.toString().substring(0, 6),
+                date: '23 Mayıs',
+                time: whoops[index].time.toString(),
                 haveProfilePicture: false,
               ),
             ),
           );
         },
-        childCount: 20,
+        childCount: whoops.length,
       ),
     );
   }
@@ -70,6 +96,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 
 //Texts and social media info icons
 class _ProfileInfoComponent extends StatelessWidget {
+  final int whoopsCount;
+
+  _ProfileInfoComponent({this.whoopsCount});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -78,7 +108,10 @@ class _ProfileInfoComponent extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Text('3 Whoops', style: TextStyle(color: kPrimaryDarkColor)),
+            Text(
+              '${whoopsCount.toString()} Whoops',
+              style: TextStyle(color: kPrimaryDarkColor),
+            ),
             SizedBox(),
             Text('Kayseri, TR', style: TextStyle(color: kPrimaryDarkColor)),
           ],
@@ -120,7 +153,9 @@ class _ProfileInfoComponent extends StatelessWidget {
         ),
         SizedBox(height: 25),
         Text(
-          'Whoop\'larım',
+          whoopsCount != 0
+              ? 'Whoop\'larım'
+              : 'Şimdiye kadar hiç whoop\'lamadınız!',
           style: TextStyle(
             color: kPrimaryDarkColor,
             fontSize: 15,

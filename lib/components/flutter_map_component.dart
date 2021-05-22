@@ -6,7 +6,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:notes_on_map/services/stream_socket.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
-import 'package:notes_on_map/modals/whoop_modal.dart';
+import 'package:notes_on_map/models/whoop_model.dart';
 
 StreamSocket streamSocket = StreamSocket();
 
