@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/main.dart';
+import 'package:whoops/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
