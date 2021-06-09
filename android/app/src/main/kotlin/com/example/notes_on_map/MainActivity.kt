@@ -1,4 +1,4 @@
-package com.example.notes_on_map
+package com.example.whoops
 
 import io.flutter.embedding.android.FlutterActivity
 

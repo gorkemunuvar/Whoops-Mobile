@@ -1,7 +1,7 @@
 import 'routing.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'providers/auth_token_provider.dart';
+import 'provider/auth_token_provider.dart';
 
 void main() => runApp(MyApp());
 

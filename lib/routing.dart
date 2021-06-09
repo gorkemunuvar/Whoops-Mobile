@@ -1,17 +1,17 @@
+import 'view/Map/map_screen.dart';
 import 'package:flutter/material.dart';
-import 'screens/Signin/signin_screen.dart';
-import 'screens/Signup/signup_screen.dart';
-import 'screens/Settings/settings_screen.dart';
-import 'screens/ChangeEmail/change_email.dart';
-import 'screens/Timeline/timeline_screen.dart';
-import 'screens/MyProfile/my_profile_screen.dart';
-import 'screens/OtherUsers/other_users_screen.dart';
-import 'screens/ChangePassword/change_password.dart';
-import 'screens/ForgotPassword/forgot_password.dart';
-import 'screens/AllMessages/all_messages_screen.dart';
-import 'screens/AnotherUser/another_user_screen.dart';
-import 'screens/MessageDetail/message_detail_screen.dart';
-import 'package:notes_on_map/screens/Map/map_screen.dart';
+import 'view/Signin/signin_screen.dart';
+import 'view/Signup/signup_screen.dart';
+import 'view/Settings/settings_screen.dart';
+import 'view/ChangeEmail/change_email.dart';
+import 'view/Timeline/timeline_screen.dart';
+import 'view/MyProfile/my_profile_screen.dart';
+import 'view/OtherUsers/other_users_screen.dart';
+import 'view/ChangePassword/change_password.dart';
+import 'view/ForgotPassword/forgot_password.dart';
+import 'view/AllMessages/all_messages_screen.dart';
+import 'view/AnotherUser/another_user_screen.dart';
+import 'view/MessageDetail/message_detail_screen.dart';
 
 class Routing {
   static Route<dynamic> generateRoute(RouteSettings settings) {
