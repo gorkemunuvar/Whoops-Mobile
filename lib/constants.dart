@@ -4,5 +4,7 @@ import 'package:flutter/material.dart';
 const kPrimaryWhiteColor = Color(0xFFFBFAF5);
 const kPrimaryDarkColor = Color(0xFF0E1111);
 
+const String _test = 'test';
+
 //Utilities
-const String kServerUrl = 'https://7d89b38bfc5a.ngrok.io';
+const String kServerUrl = 'https://whoops-backend.herokuapp.com';
