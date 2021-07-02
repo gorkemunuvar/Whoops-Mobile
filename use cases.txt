@@ -1,3 +1,10 @@
+Login olurken JWT geçerli mi diye kontrol ediyor. Eksik bir kontrol. Çünkü JWT geçerli olabilir.
+Ama sistemde herhangi bir kullanıcıya ait olmayabilir. Örneğin veritabanı silip baştan oluşturulursa.
+Bunun yerine JWT ile kullanıcı db'de var mı diye kontrol edilip eğer kullanıcı var ise ve jwt geçerli ise 
+main screen'e yönlendirilmeli.
+
+
+
 Login Screen
 -------------------
 - Sign In    	  -> JWT login auth yap ve Map Screen'e yönlendir.

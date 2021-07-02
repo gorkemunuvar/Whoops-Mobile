@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:notes_on_map/components/button_component.dart';
@@ -6,13 +7,17 @@ import 'package:notes_on_map/components/text_field_component.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:notes_on_map/services/whoop_service.dart';
 import 'package:notes_on_map/models/whoop_model.dart';
+import 'package:notes_on_map/models/address_model.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:provider/provider.dart';
 import 'package:notes_on_map/providers/auth_token_provider.dart';
 
+import 'package:notes_on_map/services/reverse_geocoding_service.dart';
+
 int _whoopTime;
 String _whoopTitle;
-String _tags;
+String _tagsInput;
 
 Random random = Random();
 
@@ -51,7 +56,7 @@ class BottomSheetModal extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 5.0),
               child: TextFieldComponent(
                 hintText: '#Etiketler',
-                onChanged: (value) => _tags = value,
+                onChanged: (value) => _tagsInput = value,
               ),
             ),
             //It can be a CupertinePicker instead.
@@ -70,19 +75,31 @@ class BottomSheetModal extends StatelessWidget {
                   text: 'Paylaş',
                   textColor: kPrimaryWhiteColor,
                   backgroundColor: kPrimaryDarkColor,
-                  onPressed: () {
-                    double rndLatitude = random.nextDouble() * 100 / 2;
-                    double rndLongitude = random.nextDouble() * 100 / 2;
+                  onPressed: () async {
+                    double rndLatitude =
+                        random.nextInt(5) + 37 + random.nextDouble();
+                    double rndLongitude =
+                        random.nextInt(15) + 28 + random.nextDouble();
 
-                    if (rndLatitude > 90.0) rndLatitude = 45.0;
-                    if (rndLongitude > 90.0) rndLongitude = 45.0;
+                    //Without subString(1) it adds a space at the beginning of the arr.
+                    List<String> tags =
+                        _tagsInput.trim().substring(1).split('#');
 
-                    Whoop whoop = Whoop(
-                      _whoopTitle,
+                    //Trim all the elements in tags arr.
+                    for (int i = 0; i < tags.length; i++) {
+                      tags[i] = tags[i].trim();
+                    }
+
+                    http.Response response = await ReverseGeocoding.getAdress(
                       rndLatitude,
                       rndLongitude,
-                      _whoopTime,
                     );
+
+                    dynamic addressMap = jsonDecode(response.body);
+                    Address address = Address.fromJson(addressMap['address']);
+
+                    Whoop whoop = Whoop(_whoopTitle, rndLatitude, rndLongitude,
+                        _whoopTime, tags, address);
 
                     String accessToken = tokenData.accessToken;
                     WhoopService.share(whoop, accessToken);

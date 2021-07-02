@@ -4,9 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:notes_on_map/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:notes_on_map/services/stream_socket.dart';
+import 'package:notes_on_map/components/flutter_map_widget.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-
-import 'package:notes_on_map/models/whoop_model.dart';
 
 StreamSocket streamSocket = StreamSocket();
 
@@ -34,7 +33,6 @@ class FlutterMapComponent extends StatelessWidget {
                   print(whoopData);
 
                   List<Marker> markers = [];
-                  //List<Whoop> whoops = [];
 
                   for (var item in whoopData) {
                     double latitude = item['latitude'];
@@ -59,82 +57,22 @@ class FlutterMapComponent extends StatelessWidget {
                     //whoops.add(whoop);
                   }
 
-                  return _FlutterMapWidget(
+                  return FlutterMapWidget(
                     markers: markers,
-                    popupController: _popupController,
+                    mapZoom: 4.8,
+                    clusterOptions: true,
                   );
                 }
               }
 
-              return _FlutterMapWidget(
+              return FlutterMapWidget(
                 markers: [],
-                popupController: _popupController,
+                mapZoom: 4.8,
+                clusterOptions: true,
               );
             },
           ),
         ),
-      ],
-    );
-  }
-}
-
-class _FlutterMapWidget extends StatefulWidget {
-  final List<Marker> markers;
-  final PopupController popupController;
-  final Function onTappedMarker;
-
-  _FlutterMapWidget({this.markers, this.popupController, this.onTappedMarker});
-
-  @override
-  __FlutterMapWidgetState createState() => __FlutterMapWidgetState();
-}
-
-class __FlutterMapWidgetState extends State<_FlutterMapWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return FlutterMap(
-      options: MapOptions(
-        //center: points[0],
-        maxZoom: 18,
-        zoom: 3,
-        plugins: [
-          MarkerClusterPlugin(),
-        ],
-        onTap: (_) =>
-            // Hide popup when the map is tapped.
-            widget.popupController.hidePopup(),
-      ),
-      layers: [
-        TileLayerOptions(
-          urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: ['a', 'b', 'c'],
-        ),
-        MarkerClusterLayerOptions(
-          maxClusterRadius: 120,
-          disableClusteringAtZoom: 6,
-          size: Size(28, 28),
-          anchor: AnchorPos.align(AnchorAlign.bottom),
-          fitBoundsOptions: FitBoundsOptions(
-            padding: EdgeInsets.all(50),
-          ),
-          markers: widget.markers,
-          polygonOptions: PolygonOptions(
-            borderColor: kPrimaryDarkColor,
-            color: kPrimaryDarkColor,
-            borderStrokeWidth: 2,
-          ),
-          /* popupOptions: PopupOptions(
-            popupSnap: PopupSnap.top,
-            popupController: popupController,
-            popupBuilder: (_, marker) => _PopupWidget(),
-          ), */
-          builder: (context, markers) {
-            return FloatingActionButton(
-              child: Text(markers.length.toString()),
-              onPressed: null,
-            );
-          },
-        )
       ],
     );
   }

@@ -6,7 +6,7 @@ class WhoopCard extends StatelessWidget {
   final String location;
   final String date;
   final String time;
-  //final String categories;
+  final List<String> tags;
   final bool haveProfilePicture;
 
   WhoopCard({
@@ -14,6 +14,7 @@ class WhoopCard extends StatelessWidget {
     this.location,
     this.date,
     this.time,
+    this.tags,
     this.haveProfilePicture = true,
   });
 
@@ -61,7 +62,9 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      title,
+                      title.length > 35
+                          ? '${title.substring(0, 35)}...'
+                          : title,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -90,7 +93,7 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.tag),
-                    Text('#Müzik #Gitar'),
+                    Text('#${tags.join('#')}'),
                   ],
                 ),
               ],
