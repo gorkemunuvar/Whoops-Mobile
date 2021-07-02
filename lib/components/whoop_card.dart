@@ -15,11 +15,13 @@ class WhoopCard extends StatelessWidget {
     this.date,
     this.time,
     this.tags,
-    this.haveProfilePicture = true,
+    this.haveProfilePicture = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    int maxStringLength = haveProfilePicture ? 28 : 35;
+
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       shape: RoundedRectangleBorder(
@@ -62,8 +64,8 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      title.length > 35
-                          ? '${title.substring(0, 35)}...'
+                      title.length > maxStringLength
+                          ? '${title.substring(0, maxStringLength)}...'
                           : title,
                       style: TextStyle(
                         fontSize: 17,

@@ -14,6 +14,7 @@ import 'package:notes_on_map/models/whoop_model.dart';
 import 'package:notes_on_map/models/address_model.dart';
 
 import "package:latlong/latlong.dart" as latLng;
+import 'package:notes_on_map/helpers/location_name_helper.dart';
 
 class ProfileScreenBody extends StatefulWidget {
   @override
@@ -65,8 +66,9 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
     List<Marker> markers = [];
 
     if (whoops.length != 0) {
-      Address addres = whoops[whoops.length - 1].address;
-      lastLocation = '${addres.province}, ${addres.countryCode.toUpperCase()}';
+      Address address = whoops[whoops.length - 1].address;
+      lastLocation =
+          '${address.province.length > 7 ? address.province.substring(0, 7) + '.' : address.province}, ${address.countryCode.toUpperCase()}';
 
       for (Whoop whoop in whoops) {
         double latitude = whoop.latitude;
@@ -104,26 +106,6 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
     );
   }
 
-  String getLocation(Address address) {
-    String location = '', country;
-    if (address.county != null)
-      location = address.county;
-    else if (address.town != null)
-      location = address.town;
-    else if (address.village != null) location = address.village;
-
-    country = address.countryCode != null || address.countryCode != ''
-        ? address.countryCode.toUpperCase()
-        : address.country;
-
-    if (location == '')
-      location += '${address.province}, $country';
-    else
-      location += ', ${address.province}, $country';
-
-    return location;
-  }
-
   //List of Whoop Cards
   Widget _buildSliverList(List<Whoop> whoops) {
     return SliverList(
@@ -138,7 +120,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
             );
 
           Address address = whoops[index].address;
-          String location = getLocation(address);
+          String location = LocationNameHelper.getLocation(address);
 
           return Container(
             color: kPrimaryWhiteColor,

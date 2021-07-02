@@ -8,6 +8,8 @@ import 'package:notes_on_map/components/flutter_map_widget.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
 import 'package:notes_on_map/models/whoop_model.dart';
+import 'package:provider/provider.dart';
+import 'package:notes_on_map/providers/whoops_provider.dart';
 
 StreamSocket streamSocket = StreamSocket();
 
@@ -34,12 +36,12 @@ class FlutterMapComponent extends StatelessWidget {
                       jsonDecode(snapshot.data)['whoops'] as List;
                   print(whoopJsonList);
 
-                  List<Marker> markers = [];
+                  List<Whoop> whoops = whoopJsonList
+                      .map((whoopJson) => Whoop.fromJson(whoopJson))
+                      .toList();
 
-                  for (var whoopJson in whoopJsonList) {
-                    Whoop whoop = Whoop.fromJson(whoopJson);
-
-                    Marker marker = Marker(
+                  List<Marker> markers = whoops.map((whoop) {
+                    return Marker(
                       anchorPos: AnchorPos.align(AnchorAlign.center),
                       height: 40.0,
                       width: 200.0,
@@ -48,9 +50,10 @@ class FlutterMapComponent extends StatelessWidget {
                         whoopTitle: whoop.title,
                       ),
                     );
+                  }).toList();
 
-                    markers.add(marker);
-                  }
+                  Provider.of<WhoopsProvider>(context, listen: true)
+                      .updateWhoops(whoops);
 
                   return FlutterMapWidget(
                     markers: markers,

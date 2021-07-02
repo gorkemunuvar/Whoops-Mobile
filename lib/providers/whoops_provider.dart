@@ -1,19 +1,13 @@
 import 'package:flutter/foundation.dart';
+import 'package:notes_on_map/models/whoop_model.dart';
 
 class WhoopsProvider extends ChangeNotifier {
-  String _accessToken = '';
-  String _refreshToken = '';
+  List<Whoop> _whoops = [];
 
-  get accessToken => _accessToken;
-  get refreshToken => _refreshToken;
+  get whoops => _whoops;
 
-  void updateAccessToken(String token) {
-    _accessToken = token;
-    notifyListeners();
-  }
-
-  void updateRefreshToken(String token) {
-    _refreshToken = token;
+  void updateWhoops(List<Whoop> whoopsStream) {
+    _whoops = whoopsStream;
     notifyListeners();
   }
 }
