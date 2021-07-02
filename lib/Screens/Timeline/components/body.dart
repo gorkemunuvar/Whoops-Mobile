@@ -34,6 +34,11 @@ class Body extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return WhoopCard(
             title: searchItems[index],
+            date: 'bok',
+            haveProfilePicture: false,
+            location: 'bok',
+            tags: ['bok', 'bokun içi'],
+            time: 'boku bok geçe',
           );
         },
       ),

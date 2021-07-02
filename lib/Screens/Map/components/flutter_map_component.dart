@@ -7,6 +7,8 @@ import 'package:notes_on_map/services/stream_socket.dart';
 import 'package:notes_on_map/components/flutter_map_widget.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
+import 'package:notes_on_map/models/whoop_model.dart';
+
 StreamSocket streamSocket = StreamSocket();
 
 class FlutterMapComponent extends StatelessWidget {
@@ -28,33 +30,26 @@ class FlutterMapComponent extends StatelessWidget {
                 return Center(child: Text('snapshot.hasError'));
               } else {
                 if (snapshot.data != null) {
-                  var whoopData = jsonDecode(snapshot.data)['whoops'] as List;
-
-                  print(whoopData);
+                  var whoopJsonList =
+                      jsonDecode(snapshot.data)['whoops'] as List;
+                  print(whoopJsonList);
 
                   List<Marker> markers = [];
 
-                  for (var item in whoopData) {
-                    double latitude = item['latitude'];
-                    double longitude = item['longitude'];
-                    String whoopTitle = item['title'];
-                    //int time = int.parse(item['time']);
-
-                    //Whoop whoop = Whoop(whoopTitle, latitude, longitude, time);
-
-                    LatLng latLng = LatLng(latitude, longitude);
+                  for (var whoopJson in whoopJsonList) {
+                    Whoop whoop = Whoop.fromJson(whoopJson);
 
                     Marker marker = Marker(
                       anchorPos: AnchorPos.align(AnchorAlign.center),
                       height: 40.0,
                       width: 200.0,
-                      point: LatLng(latitude, longitude),
-                      builder: (ctx) =>
-                          _CustomMarkerContent(whoopTitle: whoopTitle),
+                      point: LatLng(whoop.latitude, whoop.longitude),
+                      builder: (ctx) => _CustomMarkerContent(
+                        whoopTitle: whoop.title,
+                      ),
                     );
 
                     markers.add(marker);
-                    //whoops.add(whoop);
                   }
 
                   return FlutterMapWidget(
