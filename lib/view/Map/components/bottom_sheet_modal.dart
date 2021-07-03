@@ -3,19 +3,16 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:notes_on_map/services/whoop_service.dart';
-import 'package:notes_on_map/models/whoop_model.dart';
-import 'package:notes_on_map/models/address_model.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:provider/provider.dart';
 import 'package:whoops/model/whoop_model.dart';
+import 'package:whoops/model/address_model.dart';
 import 'package:whoops/controller/whoop_service.dart';
 import 'package:whoops/view/utils/button_component.dart';
 import 'package:whoops/provider/auth_token_provider.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
-
-import 'package:notes_on_map/services/reverse_geocoding_service.dart';
+import 'package:whoops/controller/reverse_geocoding_service.dart';
 
 int _whoopTime;
 String _whoopTitle;

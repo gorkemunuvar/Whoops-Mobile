@@ -1,11 +1,13 @@
+import 'whoop_service.dart';
 import 'dart:convert' as convert;
-import 'package:http/http.dart' as http;
 import 'package:whoops/constants.dart';
-
-import 'package:notes_on_map/services/whoop_service.dart';
+import 'package:http/http.dart' as http;
+import 'package:whoops/model/user_model.dart';
+import 'package:whoops/model/whoop_model.dart';
 
 class UserService {
   static Future<User> getMyProfileUser(String accessToken) async {
+    var headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $accessToken',

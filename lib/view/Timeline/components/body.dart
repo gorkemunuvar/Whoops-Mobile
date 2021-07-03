@@ -1,11 +1,10 @@
+import 'package:whoops/model/whoop_model.dart';
+import 'package:whoops/provider/whoops_provider.dart';
+import 'package:whoops/helpers/location_name_helper.dart';
+
 import '../../utils/whoop_card.dart';
 import 'package:flutter/material.dart';
-
 import 'package:provider/provider.dart';
-import 'package:notes_on_map/providers/whoops_provider.dart';
-
-import 'package:notes_on_map/models/whoop_model.dart';
-import 'package:notes_on_map/helpers/location_name_helper.dart';
 
 String query = '';
 

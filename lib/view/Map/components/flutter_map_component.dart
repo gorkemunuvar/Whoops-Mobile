@@ -3,13 +3,13 @@ import 'package:latlong/latlong.dart';
 import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:notes_on_map/services/stream_socket.dart';
-import 'package:notes_on_map/components/flutter_map_widget.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
 
-import 'package:notes_on_map/models/whoop_model.dart';
 import 'package:provider/provider.dart';
-import 'package:notes_on_map/providers/whoops_provider.dart';
+import 'package:whoops/model/whoop_model.dart';
+import 'package:whoops/controller/stream_socket.dart';
+import 'package:whoops/provider/whoops_provider.dart';
+import 'package:whoops/view/utils/flutter_map_widget.dart';
 
 StreamSocket streamSocket = StreamSocket();
 

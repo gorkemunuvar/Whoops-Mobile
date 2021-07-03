@@ -1,4 +1,4 @@
-import 'package:notes_on_map/models/address_model.dart';
+import 'package:whoops/model/address_model.dart';
 
 class LocationNameHelper {
   static String getLocation(Address address) {

@@ -1,7 +1,7 @@
 import 'top_row_buttons.dart';
 import 'bottom_row_buttons.dart';
+import 'flutter_map_component.dart';
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/screens/Map/components/flutter_map_component.dart';
 
 class Body extends StatelessWidget {
   @override
