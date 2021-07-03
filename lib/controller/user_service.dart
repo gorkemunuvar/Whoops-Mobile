@@ -1,12 +1,11 @@
-import 'dart:convert';
+import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:whoops/constants.dart';
 
-import 'package:whoops/model/user_model.dart';
+import 'package:notes_on_map/services/whoop_service.dart';
 
 class UserService {
   static Future<User> getMyProfileUser(String accessToken) async {
-    final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $accessToken',
@@ -17,7 +16,15 @@ class UserService {
       headers: headers,
     );
 
-    dynamic userMap = jsonDecode(response.body);
-    return User.fromJson(userMap);
+    dynamic userJson = convert.jsonDecode(response.body);
+
+    //Get the whoops list here related to the user using WhoopService.
+    String userId = userJson['id'];
+    List<Whoop> whoops = await WhoopService.getWhoops(accessToken, userId);
+
+    User user = User.fromJson(userJson);
+    user.whoops = whoops;
+
+    return user;
   }
 }

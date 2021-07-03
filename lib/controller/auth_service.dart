@@ -10,6 +10,6 @@ class AuthService {
     };
 
     //Make a post request with user info
-    return await http.post('$kServerUrl/logout', headers: headers);
+    return await http.post('$kServerUrl/user/logout', headers: headers);
   }
 }

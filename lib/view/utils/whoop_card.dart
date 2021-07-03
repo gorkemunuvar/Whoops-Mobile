@@ -6,7 +6,7 @@ class WhoopCard extends StatelessWidget {
   final String location;
   final String date;
   final String time;
-  //final String categories;
+  final List<String> tags;
   final bool haveProfilePicture;
 
   WhoopCard({
@@ -14,11 +14,14 @@ class WhoopCard extends StatelessWidget {
     this.location,
     this.date,
     this.time,
-    this.haveProfilePicture = true,
+    this.tags,
+    this.haveProfilePicture = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    int maxStringLength = haveProfilePicture ? 28 : 35;
+
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       shape: RoundedRectangleBorder(
@@ -61,7 +64,9 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      title,
+                      title.length > maxStringLength
+                          ? '${title.substring(0, maxStringLength)}...'
+                          : title,
                       style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -90,7 +95,7 @@ class WhoopCard extends StatelessWidget {
                 Row(
                   children: [
                     Icon(Icons.tag),
-                    Text('#Müzik #Gitar'),
+                    Text('#${tags.join('#')}'),
                   ],
                 ),
               ],

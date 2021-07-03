@@ -149,7 +149,7 @@ class Body extends StatelessWidget {
 
     //Make a post request with user info
     http.Response response = await http.post(
-      '$kServerUrl/signin',
+      '$kServerUrl/user/signin',
       headers: {'Content-Type': 'application/json'},
       body: json.encode(body),
     );

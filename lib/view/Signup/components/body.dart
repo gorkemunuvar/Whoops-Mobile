@@ -20,7 +20,7 @@ class Body extends StatelessWidget {
 
     //Parametreler ile  POST isteği yap
     http.Response response =
-        await Networking.post('${kServerUrl}/signup', body);
+        await Networking.post('${kServerUrl}/user/signup', body);
 
     //Eğer başarılı ise Login Page' yönlendir
     if (response.statusCode == 201) {

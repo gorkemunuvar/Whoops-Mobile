@@ -13,16 +13,35 @@ class WhoopService {
       'Authorization': 'Bearer $accessToken',
     };
 
-    Map<String, dynamic> body = {
-      'title': whoop.title,
-      'latitude': whoop.latitude,
-      'longitude': whoop.longitude,
-      'time': whoop.time,
-    };
+    String whoopJson = jsonEncode(whoop.toJson());
 
-    http.post(_url, headers: headers, body: json.encode(body)).then((response) {
+    http.post(_url, headers: headers, body: whoopJson).then((response) {
       print('WhoopServise.share() STATUS CODE:${response.statusCode}');
       print(response.body);
     });
+  }
+
+  static Future<List<Whoop>> getWhoops(
+      String accessToken, String userId) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.get(
+      '$kServerUrl/whoops/$userId',
+      headers: headers,
+    );
+
+    List<dynamic> whoopsJsonList = jsonDecode(response.body) as List;
+    List<Whoop> whoops = [];
+
+    for (dynamic whoopJson in whoopsJsonList) {
+      Whoop whoop = Whoop.fromJson(whoopJson);
+      whoops.add(whoop);
+    }
+
+    return whoops;
   }
 }

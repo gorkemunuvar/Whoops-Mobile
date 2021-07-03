@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:whoops/constants.dart';
-import 'package:whoops/view/utils/whoop_card.dart';
-import 'package:whoops/view/utils/circle_avatar_component.dart';
-import 'package:whoops/view/utils/flutter_map_component.dart';
+import 'package:notes_on_map/constants.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:notes_on_map/components/whoop_card.dart';
+import 'package:notes_on_map/components/flutter_map_widget.dart';
+import 'package:notes_on_map/components/circle_avatar_component.dart';
 
 import 'package:provider/provider.dart';
 import 'package:whoops/controller/user_service.dart';
 import 'package:whoops/provider/auth_token_provider.dart';
 
-import 'package:whoops/model/user_model.dart';
-import 'package:whoops/model/whoop_model.dart';
+import 'package:notes_on_map/models/user_model.dart';
+import 'package:notes_on_map/models/whoop_model.dart';
+import 'package:notes_on_map/models/address_model.dart';
+
+import "package:latlong/latlong.dart" as latLng;
+import 'package:notes_on_map/helpers/location_name_helper.dart';
 
 class ProfileScreenBody extends StatefulWidget {
   @override
@@ -27,24 +32,27 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
       builder: (context, tokenData, child) {
         return FutureBuilder(
           future: UserService.getMyProfileUser(tokenData.accessToken),
-          builder: (context, snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             if (snapshot.hasData) {
-              return CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    backgroundColor: kPrimaryWhiteColor,
-                    pinned: _pinned,
-                    snap: _snap,
-                    floating: _floating,
-                    expandedHeight: 350.0,
-                    flexibleSpace: _buildFlexibleSpaceBar(
-                      snapshot.data.whoops.length,
+              if (snapshot.data != null) {
+                User user = snapshot.data;
+
+                return CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      backgroundColor: kPrimaryWhiteColor,
+                      pinned: _pinned,
+                      snap: _snap,
+                      floating: _floating,
+                      expandedHeight: 350.0,
+                      flexibleSpace: _buildFlexibleSpaceBar(user.whoops),
                     ),
-                  ),
-                  _buildSliverList(snapshot.data.whoops),
-                ],
-              );
+                    _buildSliverList(user.whoops),
+                  ],
+                );
+              }
             }
+
             return Center(child: CircularProgressIndicator());
           },
         );
@@ -53,16 +61,46 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   }
 
   //Flexible component for CustomScrollView
-  Widget _buildFlexibleSpaceBar(int whoopsCount) {
+  Widget _buildFlexibleSpaceBar(List<Whoop> whoops) {
+    String lastLocation = '';
+    List<Marker> markers = [];
+
+    if (whoops.length != 0) {
+      Address address = whoops[whoops.length - 1].address;
+      lastLocation =
+          '${address.province.length > 7 ? address.province.substring(0, 7) + '.' : address.province}, ${address.countryCode.toUpperCase()}';
+
+      for (Whoop whoop in whoops) {
+        double latitude = whoop.latitude;
+        double longitude = whoop.longitude;
+
+        Marker marker = Marker(
+          anchorPos: AnchorPos.align(AnchorAlign.center),
+          height: 40.0,
+          width: 200.0,
+          point: latLng.LatLng(latitude, longitude),
+          builder: (context) => Icon(
+            Icons.pin_drop,
+            size: 30.0,
+          ),
+        );
+
+        markers.add(marker);
+      }
+    }
+
     return FlexibleSpaceBar(
       background: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           //Map Stack
-          _ProfileMapComponent(),
+          _ProfileMapComponent(markers: markers),
           SizedBox(height: 10),
           //Info column
-          _ProfileInfoComponent(whoopsCount: whoopsCount),
+          _ProfileInfoComponent(
+            whoopsCount: whoops.length,
+            lastLocation: lastLocation,
+          ),
         ],
       ),
     );
@@ -73,16 +111,26 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
     return SliverList(
       delegate: SliverChildBuilderDelegate(
         (BuildContext context, int index) {
+          if (whoops.length == 0)
+            return Container(
+              color: kPrimaryWhiteColor,
+              child: Center(
+                child: Text('Daha önce hiç whoop\'lamadınız :/'),
+              ),
+            );
+
+          Address address = whoops[index].address;
+          String location = LocationNameHelper.getLocation(address);
+
           return Container(
             color: kPrimaryWhiteColor,
             child: Center(
               child: WhoopCard(
                 title: whoops[index].title,
-                location: whoops[index].latitude.toString().substring(0, 5) +
-                    ' - ' +
-                    whoops[index].longitude.toString().substring(0, 6),
-                date: '23 Mayıs',
+                location: location,
+                date: whoops[index].dateCreated,
                 time: whoops[index].time.toString(),
+                tags: List<String>.from(whoops[index].tags),
                 haveProfilePicture: false,
               ),
             ),
@@ -97,8 +145,9 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 //Texts and social media info icons
 class _ProfileInfoComponent extends StatelessWidget {
   final int whoopsCount;
+  final String lastLocation;
 
-  _ProfileInfoComponent({this.whoopsCount});
+  _ProfileInfoComponent({this.whoopsCount, this.lastLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +162,7 @@ class _ProfileInfoComponent extends StatelessWidget {
               style: TextStyle(color: kPrimaryDarkColor),
             ),
             SizedBox(),
-            Text('Kayseri, TR', style: TextStyle(color: kPrimaryDarkColor)),
+            Text(lastLocation, style: TextStyle(color: kPrimaryDarkColor)),
           ],
         ),
         SizedBox(height: 15),
@@ -155,7 +204,7 @@ class _ProfileInfoComponent extends StatelessWidget {
         Text(
           whoopsCount != 0
               ? 'Whoop\'larım'
-              : 'Şimdiye kadar hiç whoop\'lamadınız!',
+              : 'Şimdiye kadar hiç whoop\'lamadınız :/',
           style: TextStyle(
             color: kPrimaryDarkColor,
             fontSize: 15,
@@ -169,6 +218,10 @@ class _ProfileInfoComponent extends StatelessWidget {
 
 //Map and Profile Picture
 class _ProfileMapComponent extends StatelessWidget {
+  final List<Marker> markers;
+
+  _ProfileMapComponent({this.markers});
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -179,7 +232,10 @@ class _ProfileMapComponent extends StatelessWidget {
           //Map
           SizedBox(
             height: 250,
-            child: FlutterMapComponent(),
+            child: FlutterMapWidget(
+              markers: markers,
+              mapZoom: 4.8,
+            ),
           ),
           Positioned(
             bottom: -60,
