@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:notes_on_map/constants.dart';
+
+import 'package:whoops/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:notes_on_map/components/whoop_card.dart';
-import 'package:notes_on_map/components/flutter_map_widget.dart';
-import 'package:notes_on_map/components/circle_avatar_component.dart';
+import 'package:whoops/view/utils/whoop_card.dart';
+import 'package:whoops/view/utils/flutter_map_widget.dart';
+import 'package:whoops/view/utils/circle_avatar_component.dart';
 
 import 'package:provider/provider.dart';
 import 'package:whoops/controller/user_service.dart';
 import 'package:whoops/provider/auth_token_provider.dart';
 
-import 'package:notes_on_map/models/user_model.dart';
-import 'package:notes_on_map/models/whoop_model.dart';
-import 'package:notes_on_map/models/address_model.dart';
+import 'package:whoops/model/user_model.dart';
+import 'package:whoops/model/whoop_model.dart';
+import 'package:whoops/model/address_model.dart';
 
 import "package:latlong/latlong.dart" as latLng;
-import 'package:notes_on_map/helpers/location_name_helper.dart';
+import 'package:whoops/helpers/location_name_helper.dart';
 
 class ProfileScreenBody extends StatefulWidget {
   @override
