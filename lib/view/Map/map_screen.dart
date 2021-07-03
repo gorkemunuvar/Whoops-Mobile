@@ -6,6 +6,15 @@ class MapScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              ListTile(
+                title: Text("deneme"),
+              )
+            ],
+          ),
+        ),
         body: Body(),
       ),
     );

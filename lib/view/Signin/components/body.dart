@@ -8,12 +8,188 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:whoops/controller/storage.dart';
 import 'package:whoops/view/utils/button_component.dart';
 import 'package:whoops/provider/auth_token_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  String _emailOrUsernameInput = '';
+  String _passwordInput = '';
+
+  bool _rememberMe;
+  TextEditingController _passwordController;
+  TextEditingController _emailOrUsernameController;
+
+  @override
+  initState() {
+    super.initState();
+
+    //Create a future builder to render after an async call
+    _handleStorageTokens(context);
+    getSharedPreferences();
+    _emailOrUsernameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _rememberMe = false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Background(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 45.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: size.height / 3,
+              ),
+              SvgPicture.asset('assets/images/logo.svg'),
+              // TextFieldComponent(
+              //   hintText: 'Kullanıcı adı veya Email',
+              //   onChanged: (value) {
+              //     _emailOrUsernameInput = value;
+              //   },
+              // ),
+              // TextFieldComponent(
+              //   hintText: 'Şifre',
+              //   obscureText: true,
+              //   onChanged: (value) {
+              //     _passwordInput = value;
+              //   },
+              // ),
+              TextField(
+                controller: _emailOrUsernameController,
+                style: TextStyle(color: kPrimaryDarkColor),
+                decoration: InputDecoration(
+                  fillColor: kPrimaryDarkColor,
+                  hintText: 'Kullanıcı adı veya Email',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey,
+                    fontSize: 15.0,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                style: TextStyle(color: kPrimaryDarkColor),
+                decoration: InputDecoration(
+                  fillColor: kPrimaryDarkColor,
+                  hintText: 'Şifre',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey,
+                    fontSize: 15.0,
+                    fontFamily: 'Roboto',
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      // _CheckBoxWidget(),
+                      Checkbox(
+                        checkColor: kPrimaryWhiteColor,
+                        activeColor: kPrimaryDarkColor,
+                        value: _rememberMe,
+                        onChanged: (value) =>
+                            setState(() => _rememberMe = value),
+                      ),
+                      Text(
+                        'Beni Hatırla',
+                        style: TextStyle(
+                          color: kPrimaryDarkColor,
+                          fontFamily: 'Roboto',
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    child: Text(
+                      'Şifremi Unuttum',
+                      style: TextStyle(
+                        color: kPrimaryDarkColor,
+                        fontFamily: 'Roboto',
+                      ),
+                    ),
+                    onTap: () =>
+                        Navigator.pushNamed(context, '/forgotPassword'),
+                  ),
+                ],
+              ),
+              SizedBox(height: 20),
+              ButtonComponent(
+                text: 'Giriş',
+                textColor: kPrimaryWhiteColor,
+                backgroundColor: kPrimaryDarkColor,
+                onPressed: () async {
+                  if (_rememberMe)
+                    await saveSharedPreferences(
+                        _emailOrUsernameController.text);
+                  _handleServerTokens(context);
+                },
+              ),
+              SizedBox(height: 10),
+              ButtonComponent(
+                text: 'Kayıt Ol',
+                textColor: kPrimaryDarkColor,
+                backgroundColor: kPrimaryWhiteColor,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/signUp');
+                },
+              ),
+              SizedBox(height: 75),
+              Center(
+                child: Text(
+                  'veya giriş yap',
+                  style:
+                      TextStyle(color: kPrimaryDarkColor, fontFamily: 'Roboto'),
+                ),
+              ),
+              SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ImageIcon(
+                    AssetImage("assets/icons/google.png"),
+                    size: 50.0,
+                  ),
+                  SizedBox(width: 7),
+                  ImageIcon(
+                    AssetImage("assets/icons/facebook.png"),
+                    size: 42.0,
+                  ),
+                  SizedBox(width: 7),
+                  ImageIcon(
+                    AssetImage("assets/icons/twitter.png"),
+                    size: 52.0,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<Map<String, String>> _getTokens() async {
     Storage tokenStorage = Storage();
     Map<String, String> tokens = await tokenStorage.readTokens();
@@ -57,7 +233,6 @@ class Body extends StatelessWidget {
     return flag;
   }
 
-  //I dont check whether if the token is in the blacklist. This is a problem
   void _handleStorageTokens(BuildContext context) {
     _getTokens().then((value) async {
       //If user logged in before get the token from local storage
@@ -66,7 +241,7 @@ class Body extends StatelessWidget {
         String refreshToken = value['whoops_refresh_token'];
 
         print('Device has token.');
-        print('Acces Token: $accessToken');
+        print('Access Token: $accessToken');
         print('Refresh Token: $refreshToken');
 
         bool netConnectionState = await checkConnection();
@@ -91,7 +266,8 @@ class Body extends StatelessWidget {
           }
 
           //Check if the tokens has expired
-          bool isTokenExpired = JwtDecoder.isExpired(accessToken);
+          // bool isTokenExpired = JwtDecoder.isExpired(accessToken);
+          bool isTokenExpired = false;
 
           //Get a new  access token using refresh token
           if (isTokenExpired) {
@@ -142,9 +318,13 @@ class Body extends StatelessWidget {
 
   void _handleServerTokens(BuildContext context) async {
     //Get email and password info from text fields
+    // Map<String, String> body = {
+    //   'email': _emailOrUsernameInput,
+    //   'password': _passwordInput,
+    // };
     Map<String, String> body = {
-      'email': _emailInput,
-      'password': _passwordInput,
+      'email': _emailOrUsernameController.text,
+      'password': _passwordController.text,
     };
 
     //Make a post request with user info
@@ -187,152 +367,38 @@ class Body extends StatelessWidget {
     }
   }
 
-  String _emailInput = '';
-  String _passwordInput = '';
+  Future<bool> saveSharedPreferences(String username) async {
+    var shared = await SharedPreferences.getInstance();
+    return shared.setString("whoopsUsername", username);
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    //Create a future builder to render after an async call
-    _handleStorageTokens(context);
-
-    Size size = MediaQuery.of(context).size;
-    return Background(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 45.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(
-                height: size.height / 3,
-              ),
-              SvgPicture.asset('assets/images/logo.svg'),
-              TextFieldComponent(
-                hintText: 'Email',
-                onChanged: (value) {
-                  _emailInput = value;
-                },
-              ),
-              TextFieldComponent(
-                hintText: 'Şifre',
-                obscureText: true,
-                onChanged: (value) {
-                  _passwordInput = value;
-                },
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      _CheckBoxWidget(),
-                      Text(
-                        'Beni Hatırla',
-                        style: TextStyle(
-                          color: kPrimaryDarkColor,
-                          fontFamily: 'Roboto',
-                        ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    child: Text(
-                      'Şifremi Unuttum',
-                      style: TextStyle(
-                        color: kPrimaryDarkColor,
-                        fontFamily: 'Roboto',
-                      ),
-                    ),
-                    onTap: () =>
-                        Navigator.pushNamed(context, '/forgotPassword'),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              ButtonComponent(
-                text: 'Giriş',
-                textColor: kPrimaryWhiteColor,
-                backgroundColor: kPrimaryDarkColor,
-                onPressed: () {
-                  _handleServerTokens(context);
-                },
-              ),
-              SizedBox(height: 10),
-              ButtonComponent(
-                text: 'Kayıt Ol',
-                textColor: kPrimaryDarkColor,
-                backgroundColor: kPrimaryWhiteColor,
-                onPressed: () {
-                  Navigator.pushNamed(context, '/signUp');
-                },
-              ),
-              SizedBox(height: 75),
-              Center(
-                child: Text(
-                  'ile giriş yap',
-                  style:
-                      TextStyle(color: kPrimaryDarkColor, fontFamily: 'Roboto'),
-                ),
-              ),
-              SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ImageIcon(
-                    AssetImage("assets/icons/google.png"),
-                    size: 50.0,
-                  ),
-                  SizedBox(width: 7),
-                  ImageIcon(
-                    AssetImage("assets/icons/facebook.png"),
-                    size: 42.0,
-                  ),
-                  SizedBox(width: 7),
-                  ImageIcon(
-                    AssetImage("assets/icons/twitter.png"),
-                    size: 52.0,
-                  ),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+  void getSharedPreferences() async {
+    var shared = await SharedPreferences.getInstance();
+    String value = shared.getString("whoopsUsername");
+    if (value != null) _emailOrUsernameController.text = value;
   }
 }
 
-class _CheckBoxWidget extends StatefulWidget {
-  @override
-  __CheckBoxWidgetState createState() => __CheckBoxWidgetState();
-}
+// class _CheckBoxWidget extends StatefulWidget {
+//   @override
+//   __CheckBoxWidgetState createState() => __CheckBoxWidgetState();
+// }
 
-class __CheckBoxWidgetState extends State<_CheckBoxWidget> {
-  bool rememberMe = false;
+// class __CheckBoxWidgetState extends State<_CheckBoxWidget> {
+//   void _onRememberMeChanged(bool newValue) =>
+//       setState(() => _rememberMe = newValue);
 
-  void _onRememberMeChanged(bool newValue) => setState(() {
-        rememberMe = newValue;
-
-        if (rememberMe) {
-          // TODO: Here goes your functionality that remembers the user.
-        } else {
-          // TODO: Forget the user
-        }
-      });
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 24.0,
-      width: 24.0,
-      child: Checkbox(
-        checkColor: kPrimaryWhiteColor,
-        activeColor: kPrimaryDarkColor,
-        value: rememberMe,
-        onChanged: _onRememberMeChanged,
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return SizedBox(
+//       height: 24.0,
+//       width: 24.0,
+//       child: Checkbox(
+//         checkColor: kPrimaryWhiteColor,
+//         activeColor: kPrimaryDarkColor,
+//         value: _rememberMe,
+//         onChanged: _onRememberMeChanged,
+//       ),
+//     );
+//   }
+// }

@@ -7,32 +7,14 @@ import 'package:whoops/view/SignUp/components/background.dart';
 
 import 'package:http/http.dart' as http;
 
-class Body extends StatelessWidget {
-  void _handleSignup(
-    String email,
-    String password,
-    BuildContext context,
-  ) async {
-    Map<String, String> body = {
-      'email': email,
-      'password': password,
-    };
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
 
-    //Parametreler ile  POST isteği yap
-    http.Response response =
-        await Networking.post('${kServerUrl}/user/signup', body);
-
-    //Eğer başarılı ise Login Page' yönlendir
-    if (response.statusCode == 201) {
-      print('Kayıt olma işlemi başarılı.');
-      Navigator.pushNamed(context, '/signIn');
-    }
-    //Hatalı sonuç döner ise uyarı ver.
-    else
-      print('${response.statusCode}. Bir hata ile karşılaştınız.');
-  }
-
+class _BodyState extends State<Body> {
   String _emailInput = '';
+  String _usernameInput = '';
   String _passwordInput = '';
 
   @override
@@ -67,6 +49,12 @@ class Body extends StatelessWidget {
                 },
               ),
               TextFieldComponent(
+                hintText: 'Kullanıcı Adı',
+                onChanged: (value) {
+                  _usernameInput = value;
+                },
+              ),
+              TextFieldComponent(
                 hintText: 'Şifre',
                 onChanged: (value) {
                   _passwordInput = value;
@@ -80,9 +68,10 @@ class Body extends StatelessWidget {
                 backgroundColor: kPrimaryDarkColor,
                 onPressed: () {
                   _handleSignup(
-                    _emailInput,
-                    _passwordInput,
                     context,
+                    _emailInput,
+                    _usernameInput,
+                    _passwordInput,
                   );
                 },
               ),
@@ -128,5 +117,32 @@ class Body extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _handleSignup(
+    BuildContext context,
+    String email,
+    String username,
+    String password,
+  ) async {
+    Map<String, String> body = {
+      'email': email,
+      'username': username,
+      'password': password,
+    };
+
+    //Parametreler ile  POST isteği yap
+    http.Response response =
+        await Networking.post('$kServerUrl/user/signup', body);
+
+    //Eğer başarılı ise Login Page' yönlendir
+    if (response.statusCode == 201) {
+      print('Kayıt olma işlemi başarılı.');
+      // TODO: Burada sign in yerine map screen'e yönlendirilebilir.
+      Navigator.pushNamed(context, '/signIn');
+    }
+    //Hatalı sonuç döner ise uyarı ver.
+    else
+      print('${response.statusCode}. Bir hata ile karşılaştınız.');
   }
 }

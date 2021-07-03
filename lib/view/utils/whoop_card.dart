@@ -20,8 +20,6 @@ class WhoopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int maxStringLength = haveProfilePicture ? 28 : 35;
-
     return Card(
       margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
       shape: RoundedRectangleBorder(
@@ -58,47 +56,44 @@ class WhoopCard extends StatelessWidget {
                 : Container(),
             SizedBox(width: 10.0),
             //Info Column
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      title.length > maxStringLength
-                          ? '${title.substring(0, maxStringLength)}...'
-                          : title,
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                      ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.location_on),
-                    Text(location),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.date_range),
-                    Text(date),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.timer),
-                    Text(time),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.tag),
-                    Text('#${tags.join('#')}'),
-                  ],
-                ),
-              ],
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on),
+                      Text(location),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.date_range),
+                      Text(date),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.timer),
+                      Text(time),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Icon(Icons.tag),
+                      Text('#${tags.join('#')}'),
+                    ],
+                  ),
+                ],
+              ),
             )
           ],
         ),

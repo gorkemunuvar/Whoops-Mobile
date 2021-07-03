@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:whoops/constants.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:whoops/view/utils/whoop_card.dart';
-import 'package:whoops/view/utils/flutter_map_widget.dart';
-import 'package:whoops/view/utils/circle_avatar_component.dart';
 
 import 'package:provider/provider.dart';
 import 'package:whoops/controller/user_service.dart';
@@ -16,6 +12,9 @@ import 'package:whoops/model/address_model.dart';
 
 import "package:latlong/latlong.dart" as latLng;
 import 'package:whoops/helpers/location_name_helper.dart';
+import 'whoop_card.dart';
+import 'circle_avatar_component.dart';
+import 'flutter_map_widget.dart';
 
 class ProfileScreenBody extends StatefulWidget {
   @override
