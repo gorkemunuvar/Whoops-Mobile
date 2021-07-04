@@ -19,7 +19,7 @@ class Body extends StatelessWidget {
             children: [
               SizedBox(height: 15),
               TextFieldComponent(hintText: 'Şifre', obscureText: true),
-              TextFieldComponent(hintText: 'Yeni e-posta adresi'),
+              TextFieldComponent(hintText: 'Yeni kullanıcı adı'),
               SizedBox(height: 15),
               ButtonComponent(
                 text: 'Güncelle',

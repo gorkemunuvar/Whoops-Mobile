@@ -16,7 +16,7 @@ class ChangeUsernameScreen extends StatelessWidget {
     return AppBar(
       backgroundColor: kPrimaryDarkColor,
       title: Text(
-        'E-posta adresini değiştir',
+        'Kullanıcı Adını Değiştir',
         style: TextStyle(color: kPrimaryWhiteColor),
       ),
     );

@@ -14,9 +14,10 @@ import 'package:whoops/view/utils/flutter_map_widget.dart';
 import 'package:whoops/controller/location_service.dart';
 
 StreamSocket streamSocket = StreamSocket();
-MapController _mapController = MapController();
 
 class FlutterMapComponent extends StatefulWidget {
+  final MapController mapController;
+  FlutterMapComponent(this.mapController);
   @override
   _FlutterMapComponentState createState() => _FlutterMapComponentState();
 }
@@ -24,10 +25,12 @@ class FlutterMapComponent extends StatefulWidget {
 Future<LatLng> _currentLocation;
 
 class _FlutterMapComponentState extends State<FlutterMapComponent> {
+  MapController _mapController;
   @override
   void initState() {
     super.initState();
     _currentLocation = LocationService.getCurrentLocation();
+    _mapController = widget.mapController;
   }
 
   @override
@@ -48,10 +51,11 @@ class _FlutterMapComponentState extends State<FlutterMapComponent> {
                   LatLng(40.04145833569767, 29.11417283140674);
               if (snapshot.connectionState == ConnectionState.done) {
                 centerLocation = snapshot.data;
-                // _mapController.move(centerLocation, 10);
+                _mapController.move(centerLocation, 10);
               }
               return MapStreamBuilder(
                 centerLocation: centerLocation,
+                mapController: _mapController,
               );
             },
           ),
@@ -63,8 +67,8 @@ class _FlutterMapComponentState extends State<FlutterMapComponent> {
 
 class MapStreamBuilder extends StatelessWidget {
   final LatLng centerLocation;
-
-  MapStreamBuilder({this.centerLocation});
+  final MapController mapController;
+  MapStreamBuilder({this.centerLocation, this.mapController});
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +108,7 @@ class MapStreamBuilder extends StatelessWidget {
           markers: markers,
           mapZoom: 7,
           centerLocation: centerLocation,
-          mapController: _mapController,
+          mapController: mapController,
         );
       },
     );

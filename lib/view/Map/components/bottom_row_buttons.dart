@@ -1,9 +1,15 @@
+import 'package:flutter_map/flutter_map.dart';
+import 'package:whoops/controller/location_service.dart';
+
 import 'bottom_sheet_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
 
 //Bottom buttons on the map screen
 class BottomRowButtons extends StatelessWidget {
+  final MapController _mapController;
+  BottomRowButtons(this._mapController);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,7 +25,11 @@ class BottomRowButtons extends StatelessWidget {
               Icons.gps_fixed,
               size: 30.0,
             ),
-            onPressed: () {},
+            onPressed: () {
+              LocationService.getCurrentLocation().then(
+                (_currentLocation) => _mapController.move(_currentLocation, 10),
+              );
+            },
           ),
         ),
         SizedBox(

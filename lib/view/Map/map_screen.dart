@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:whoops/controller/auth_service.dart';
 import 'package:whoops/model/user_model.dart';
 import 'package:whoops/provider/user_provider.dart';
 import 'package:whoops/view/Map/components/body.dart';
+
+import 'package:http/http.dart' as http;
 
 class MapScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
@@ -27,35 +30,45 @@ class MapScreen extends StatelessWidget {
 
                         print(jsonEncode(user.toJson()));
 
-                        return Container(
-                          padding: EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              CircleAvatar(
-                                backgroundImage:
-                                    AssetImage('assets/images/profile.png'),
-                                radius: 40,
-                              ),
-                              SizedBox(width: 5),
-                              Expanded(
-                                child: FittedBox(
-                                  child: Text(
-                                    "@${user.username}",
-                                    style: TextStyle(fontSize: 24),
+                        return GestureDetector(
+                          child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage:
+                                      AssetImage('assets/images/profile.png'),
+                                  radius: 40,
+                                ),
+                                SizedBox(width: 18),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        // "afadssssssssssssffffffffflastName}",
+                                        "${user.firstName} ${user.lastName}",
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text("@${user.username}"),
+                                    ],
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                          onTap: () =>
+                              Navigator.pushNamed(context, '/myProfile'),
                         );
                       },
                     ),
-                    _listTile(
-                      "Profilim",
-                      Icons.message,
-                      () => Navigator.pushNamed(context, '/myProfile'),
-                    ),
+                    Divider(thickness: 1),
                     _listTile(
                       "Mesajlar",
                       Icons.message,
@@ -68,9 +81,20 @@ class MapScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Align(
-                  alignment: Alignment.bottomLeft,
-                  child: _listTile("Çıkış Yap", Icons.exit_to_app, () {}),
+                Consumer<UserProvider>(
+                  builder: (context, tokenData, child) {
+                    return Align(
+                      alignment: Alignment.bottomLeft,
+                      child: _listTile(
+                        "Çıkış Yap",
+                        Icons.exit_to_app,
+                        () async {
+                          print(tokenData.accessToken);
+                          await _handleLogout(context, tokenData.accessToken);
+                        },
+                      ),
+                    );
+                  },
                 )
               ],
             ),
@@ -87,5 +111,18 @@ class MapScreen extends StatelessWidget {
       leading: Icon(leading),
       onTap: onTap,
     );
+  }
+
+  Future<void> _handleLogout(BuildContext context, String accessToken) async {
+    http.Response response = await AuthService.logout(accessToken);
+
+    if (response.statusCode == 200) {
+      print('User logged out.');
+
+      Navigator.pushReplacementNamed(context, '/signIn');
+    } else {
+      print('Something went wrong! (My Profile Screen)');
+      print('Status Code: ${response.statusCode}');
+    }
   }
 }

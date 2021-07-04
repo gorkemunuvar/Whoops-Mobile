@@ -1,11 +1,13 @@
 import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:latlong/latlong.dart';
 import 'package:whoops/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:provider/provider.dart';
+import 'package:whoops/controller/location_service.dart';
 import 'package:whoops/model/whoop_model.dart';
 import 'package:whoops/model/address_model.dart';
 import 'package:whoops/controller/whoop_service.dart';
@@ -75,10 +77,8 @@ class BottomSheetModal extends StatelessWidget {
                   textColor: kPrimaryWhiteColor,
                   backgroundColor: kPrimaryDarkColor,
                   onPressed: () async {
-                    double rndLatitude =
-                        random.nextInt(5) + 37 + random.nextDouble();
-                    double rndLongitude =
-                        random.nextInt(15) + 28 + random.nextDouble();
+                    LatLng location =
+                        await LocationService.getCurrentLocation();
 
                     //Without subString(1) it adds a space at the beginning of the arr.
                     List<String> tags =
@@ -90,15 +90,21 @@ class BottomSheetModal extends StatelessWidget {
                     }
 
                     http.Response response = await ReverseGeocoding.getAdress(
-                      rndLatitude,
-                      rndLongitude,
+                      location.latitude,
+                      location.longitude,
                     );
 
                     dynamic addressMap = jsonDecode(response.body);
                     Address address = Address.fromJson(addressMap['address']);
 
-                    Whoop whoop = Whoop(_whoopTitle, rndLatitude, rndLongitude,
-                        _whoopTime, tags, address);
+                    Whoop whoop = Whoop(
+                      _whoopTitle,
+                      location.latitude,
+                      location.longitude,
+                      _whoopTime,
+                      tags,
+                      address,
+                    );
 
                     String accessToken = tokenData.accessToken;
                     WhoopService.share(whoop, accessToken);
