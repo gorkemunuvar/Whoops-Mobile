@@ -366,7 +366,7 @@ class _BodyState extends State<Body> {
         User user = await UserService.getUser(tokens['access_token']);
         Provider.of<UserProvider>(context, listen: false).updateUser(user);
 
-        Navigator.pushNamed(context, '/map', arguments: {'user': user});
+        Navigator.pushNamed(context, '/map');
       });
     } else if (response.statusCode == 401) {
       print('Wrong Credentials!');

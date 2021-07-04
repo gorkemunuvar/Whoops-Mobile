@@ -37,12 +37,74 @@ class WhoopService {
     );
 
     List<dynamic> whoopsJsonList = jsonDecode(response.body) as List;
-    List<Whoop> whoops = [];
+    List<Whoop> whoops =
+        whoopsJsonList.map((whoopJson) => Whoop.fromJson(whoopJson)).toList();
 
-    for (dynamic whoopJson in whoopsJsonList) {
-      Whoop whoop = Whoop.fromJson(whoopJson);
-      whoops.add(whoop);
-    }
+    return whoops;
+  }
+
+  static Future<List<Whoop>> getActiveWhoopsByTitle(
+    String accessToken,
+    String title,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.get(
+      '$kServerUrl/whoops/title/$title',
+      headers: headers,
+    );
+
+    List<dynamic> whoopsJsonList = jsonDecode(response.body) as List;
+    List<Whoop> whoops =
+        whoopsJsonList.map((whoopJson) => Whoop.fromJson(whoopJson)).toList();
+
+    return whoops;
+  }
+
+  static Future<List<Whoop>> getActiveWhoopsByTag(
+    String accessToken,
+    String tag,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.get(
+      '$kServerUrl/whoops/tag/$tag',
+      headers: headers,
+    );
+
+    List<dynamic> whoopsJsonList = jsonDecode(response.body) as List;
+    List<Whoop> whoops =
+        whoopsJsonList.map((whoopJson) => Whoop.fromJson(whoopJson)).toList();
+
+    return whoops;
+  }
+
+  static Future<List<Whoop>> getActiveWhoopsByUsername(
+    String accessToken,
+    String username,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.get(
+      '$kServerUrl/whoops/username/$username',
+      headers: headers,
+    );
+
+    List<dynamic> whoopsJsonList = jsonDecode(response.body) as List;
+    List<Whoop> whoops =
+        whoopsJsonList.map((whoopJson) => Whoop.fromJson(whoopJson)).toList();
 
     return whoops;
   }

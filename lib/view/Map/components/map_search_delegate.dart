@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
+import 'package:whoops/controller/whoop_service.dart';
+import '../../utils/whoop_card.dart';
+import 'package:provider/provider.dart';
+import 'package:whoops/model/whoop_model.dart';
+import 'package:whoops/helpers/location_name_helper.dart';
+import 'package:whoops/provider/user_provider.dart';
 
 class MapSearchDelegate extends SearchDelegate<String> {
-  final List<String> places = ['Aaaaa', 'bbbbbb', 'cccccc', 'dddddd', 'eeeee'];
-
-  List<String> filterName = [];
-
   @override
   List<Widget> buildActions(BuildContext context) {
     return <Widget>[
@@ -28,43 +30,79 @@ class MapSearchDelegate extends SearchDelegate<String> {
         progress: transitionAnimation,
       ),
       onPressed: () {
-        close(context, null);
+        close(context, 'null');
       },
     );
   }
 
-  final List<String> _history = [
-    "Aurora",
-    "Austin",
-    "Bakersfield",
-    "Baltimore",
-    "Barnstable",
-    "Baton Rouge",
-    "Beaumont",
-    "Bel Air",
-    "Bellevue",
-    "Berkeley",
-    "Bethlehem",
-    "Kadıköy",
-    "Pozcu",
-    "Turgut Özal"
-  ];
-
-  Widget _buildList() {
-    final searchItems = query.isEmpty
-        ? _history
-        : _history
-            .where((c) => c.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-
+  @override
+  Widget buildSuggestions(BuildContext context) {
     return Container(
       color: kPrimaryWhiteColor,
-      child: ListView.builder(
-        itemCount: searchItems.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text('${searchItems[index]}'),
+    );
+  }
+
+  Widget _buildList() {
+    return Container(
+      color: kPrimaryWhiteColor,
+      child: Consumer<UserProvider>(
+        builder: (context, user, child) {
+          String location;
+
+          Future<List<Whoop>> _futureFunc;
+
+          if (query.startsWith('@'))
+            _futureFunc = WhoopService.getActiveWhoopsByUsername(
+              user.accessToken,
+              query.substring(1, query.length),
+            );
+          else if (query.startsWith('#'))
+            _futureFunc = WhoopService.getActiveWhoopsByTag(
+              user.accessToken,
+              query.substring(1, query.length),
+            );
+          else
+            _futureFunc = WhoopService.getActiveWhoopsByTitle(
+              user.accessToken,
+              query,
+            );
+          ;
+
+          return FutureBuilder<List<Whoop>>(
+            future: _futureFunc,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<Whoop> whoops = snapshot.data;
+
+                if (whoops.length == 0)
+                  return Container(
+                    color: kPrimaryWhiteColor,
+                    child: Center(
+                      child: Text('Eşleşme bulunamadı.'),
+                    ),
+                  );
+                whoops = whoops.reversed.toList();
+
+                return ListView.builder(
+                  itemCount: whoops.length,
+                  itemBuilder: (BuildContext context, int i) {
+                    location =
+                        LocationNameHelper.getLocation(whoops[i].address);
+
+                    return WhoopCard(
+                      title: whoops[i].title,
+                      date: whoops[i].dateCreated,
+                      location: location,
+                      tags: List<String>.from(whoops[i].tags),
+                      time: whoops[i].time.toString(),
+                      haveProfilePicture: true,
+                    );
+                  },
+                );
+              }
+
+              return Center(child: CircularProgressIndicator());
+            },
           );
         },
       ),
@@ -72,30 +110,7 @@ class MapSearchDelegate extends SearchDelegate<String> {
   }
 
   @override
-  Widget buildSuggestions(BuildContext context) {
-    final suggestions = query.isEmpty
-        ? _history
-        : places.where((c) => c.toLowerCase().contains(query)).toList();
-
-    return _buildList();
-
-    /* return ListView.builder(
-      itemCount: suggestions.length,
-      itemBuilder: (BuildContext context, int index) {
-        return new ListTile(
-          title: Text(suggestions[index]),
-          onTap: () {
-            showResults(context);
-            //close(context, suggestions[index]);
-          },
-        );
-      },
-    ); */
-  }
-
-  @override
   Widget buildResults(BuildContext context) {
-    //Burası ise geriye arama sonuçlarını içeren bir screen döndürmeli.
     return _buildList();
   }
 }
