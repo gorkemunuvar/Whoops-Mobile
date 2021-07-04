@@ -34,11 +34,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   Widget build(BuildContext context) {
     return Consumer<UserProvider>(
       builder: (context, tokenData, child) {
+        print(tokenData.accessToken);
+
         return FutureBuilder(
           future: UserService.getMyProfile(tokenData.accessToken),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data != null) {
+                print(snapshot.data);
+
                 User user = snapshot.data;
 
                 Provider.of<UserProvider>(context, listen: false)

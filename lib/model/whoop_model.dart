@@ -1,6 +1,7 @@
 import 'address_model.dart';
 
 class Whoop {
+  final String id;
   final String title;
   final double latitude;
   final double longitude;
@@ -18,12 +19,14 @@ class Whoop {
     this.time,
     this.tags,
     this.address, {
+    this.id,
     this.dateCreated,
     this.startingTime,
     this.endingTime,
   });
 
   Map<String, dynamic> toJson() => {
+        'id': this.id,
         'title': this.title,
         'latitude': this.latitude,
         'longitude': this.longitude,
@@ -33,7 +36,8 @@ class Whoop {
       };
 
   Whoop.fromJson(dynamic json)
-      : title = json['title'],
+      : id = json['id'],
+        title = json['title'],
         latitude = json['latitude'],
         longitude = json['longitude'],
         time = json['time'],

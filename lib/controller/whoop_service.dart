@@ -22,7 +22,9 @@ class WhoopService {
   }
 
   static Future<List<Whoop>> getWhoops(
-      String accessToken, String userId) async {
+    String accessToken,
+    String userId,
+  ) async {
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',

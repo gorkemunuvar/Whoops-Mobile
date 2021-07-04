@@ -23,24 +23,12 @@ class UserService {
   }
 
   static Future<User> getMyProfile(String accessToken) async {
-    var headers = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $accessToken',
-    };
-
-    http.Response response = await http.get(
-      '$kServerUrl/user',
-      headers: headers,
-    );
-
-    dynamic userJson = convert.jsonDecode(response.body);
+    User user = await getUser(accessToken);
 
     //Get the whoops list here related to the user using WhoopService.
-    String userId = userJson['id'];
+    String userId = user.id;
     List<Whoop> whoops = await WhoopService.getWhoops(accessToken, userId);
 
-    User user = User.fromJson(userJson);
     user.whoops = whoops;
 
     return user;

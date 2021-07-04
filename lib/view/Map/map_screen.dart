@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:whoops/model/user_model.dart';
@@ -6,6 +7,7 @@ import 'package:whoops/view/Map/components/body.dart';
 
 class MapScreen extends StatelessWidget {
   final GlobalKey<ScaffoldState> globalKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -22,6 +24,9 @@ class MapScreen extends StatelessWidget {
                     Consumer<UserProvider>(
                       builder: (context, data, child) {
                         User user = data.user;
+
+                        print(jsonEncode(user.toJson()));
+
                         return Container(
                           padding: EdgeInsets.all(20),
                           child: Row(
@@ -36,7 +41,7 @@ class MapScreen extends StatelessWidget {
                               Expanded(
                                 child: FittedBox(
                                   child: Text(
-                                    "${user.firstName} ${user.lastName}",
+                                    "@${user.username}",
                                     style: TextStyle(fontSize: 24),
                                   ),
                                 ),
@@ -45,6 +50,11 @@ class MapScreen extends StatelessWidget {
                           ),
                         );
                       },
+                    ),
+                    _listTile(
+                      "Profilim",
+                      Icons.message,
+                      () => Navigator.pushNamed(context, '/myProfile'),
                     ),
                     _listTile(
                       "Mesajlar",

@@ -12,6 +12,7 @@ import 'package:whoops/view/utils/button_component.dart';
 import 'package:whoops/provider/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
+import 'package:whoops/controller/user_service.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -200,8 +201,6 @@ class _BodyState extends State<Body> {
   }
 
   Future<bool> _isTokenBlacklisted(String accessToken) async {
-    int statusCode;
-
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -212,17 +211,13 @@ class _BodyState extends State<Body> {
       '$kServerUrl/token/is_token_blacklisted',
       headers: headers,
     );
-    statusCode = response.statusCode;
 
-    if (statusCode == 200) {
-      User user = User.fromJson(jsonDecode(response.body));
-      Provider.of<UserProvider>(context, listen: false).updateUser(user);
-      print(user.username);
-    }
+    print(response.body);
+    print(response.statusCode);
 
     //200 means token is blacklisted
     //404 means token is not blacklisted
-    if (statusCode == 200) return true;
+    if (response.statusCode == 200 || response.statusCode == 401) return true;
     return false;
   }
 
@@ -262,7 +257,7 @@ class _BodyState extends State<Body> {
 
           bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
 
-          if (!isTokenBlacklisted) {
+          if (isTokenBlacklisted) {
             print('Token was blacklisted.');
 
             //Do not let user login
@@ -316,6 +311,10 @@ class _BodyState extends State<Body> {
               .updateRefreshToken(refreshToken);
 
           print('LOGGED IN');
+
+          User user = await UserService.getUser(accessToken);
+          Provider.of<UserProvider>(context, listen: false).updateUser(user);
+
           Navigator.pushNamed(context, '/map');
         }
       } else
@@ -357,14 +356,17 @@ class _BodyState extends State<Body> {
         tokens['access_token'],
         tokens['refresh_token'],
       )
-          .then((value) {
+          .then((value) async {
         Provider.of<UserProvider>(context, listen: false)
             .updateAccessToken(tokens['access_token']);
         Provider.of<UserProvider>(context, listen: false)
             .updateRefreshToken(tokens['refresh_token']);
 
         print('LOGGED IN');
-        Navigator.pushNamed(context, '/map');
+        User user = await UserService.getUser(tokens['access_token']);
+        Provider.of<UserProvider>(context, listen: false).updateUser(user);
+
+        Navigator.pushNamed(context, '/map', arguments: {'user': user});
       });
     } else if (response.statusCode == 401) {
       print('Wrong Credentials!');
