@@ -13,8 +13,8 @@ import 'package:whoops/view/utils/flutter_map_widget.dart';
 
 import 'package:whoops/controller/location_service.dart';
 
-//LatLng currentLocation;
 StreamSocket streamSocket = StreamSocket();
+MapController _mapController = MapController();
 
 class FlutterMapComponent extends StatefulWidget {
   @override
@@ -45,15 +45,15 @@ class _FlutterMapComponentState extends State<FlutterMapComponent> {
           child: FutureBuilder(
             future: _currentLocation,
             builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  print('done worked.');
-                  return MapStreamBuilder(centerLocation: snapshot.data);
-
-                default:
-                  print('default worked.');
-                  return MapStreamBuilder();
+              LatLng centerLocation =
+                  LatLng(40.04145833569767, 29.11417283140674);
+              if (snapshot.connectionState == ConnectionState.done) {
+                centerLocation = snapshot.data;
+                _mapController.move(centerLocation, 10);
               }
+              return MapStreamBuilder(
+                centerLocation: centerLocation,
+              );
             },
           ),
         ),
@@ -72,6 +72,7 @@ class MapStreamBuilder extends StatelessWidget {
     return StreamBuilder(
       stream: streamSocket.getResponse,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        List<Marker> markers = [];
         if (snapshot.hasError) {
           return Center(child: Text('snapshot.hasError'));
         } else {
@@ -83,7 +84,7 @@ class MapStreamBuilder extends StatelessWidget {
                 .map((whoopJson) => Whoop.fromJson(whoopJson))
                 .toList();
 
-            List<Marker> markers = whoops.map((whoop) {
+            markers = whoops.map((whoop) {
               return Marker(
                 anchorPos: AnchorPos.align(AnchorAlign.center),
                 height: 40.0,
@@ -97,19 +98,14 @@ class MapStreamBuilder extends StatelessWidget {
 
             Provider.of<WhoopsProvider>(context, listen: true)
                 .updateWhoops(whoops);
-
-            return FlutterMapWidget(
-              markers: markers,
-              mapZoom: 7,
-              centerLocation: centerLocation,
-            );
           }
         }
 
         return FlutterMapWidget(
-          markers: [],
+          markers: markers,
           mapZoom: 7,
           centerLocation: centerLocation,
+          mapController: _mapController,
         );
       },
     );

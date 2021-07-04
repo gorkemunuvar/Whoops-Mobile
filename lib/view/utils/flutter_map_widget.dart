@@ -10,11 +10,13 @@ class FlutterMapWidget extends StatefulWidget {
   final List<Marker> markers;
   final double mapZoom;
   final LatLng centerLocation;
+  final MapController mapController;
 
   FlutterMapWidget({
     this.markers,
     this.mapZoom = 3,
     this.centerLocation,
+    this.mapController,
   });
 
   @override
@@ -25,6 +27,7 @@ class _FlutterMapWidgetState extends State<FlutterMapWidget> {
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
+      mapController: widget.mapController,
       options: MapOptions(
         center: widget.centerLocation,
         maxZoom: 18,

@@ -4,6 +4,9 @@ import 'flutter_map_component.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
+  final GlobalKey<ScaffoldState> _key;
+  Body(this._key);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -13,7 +16,7 @@ class Body extends StatelessWidget {
           alignment: Alignment.topCenter,
           child: Padding(
             padding: EdgeInsets.only(top: 5.0, right: 10.0, left: 10.0),
-            child: TopRowButtons(),
+            child: TopRowButtons(_key),
           ),
         ),
         Align(

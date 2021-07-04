@@ -23,27 +23,14 @@ class BottomRowButtons extends StatelessWidget {
           ),
         ),
         SizedBox(
-          width: 50,
-          height: 50,
-          child: FloatingActionButton(
-            heroTag: 'btn2',
-            backgroundColor: kPrimaryDarkColor,
-            child: Icon(
-              Icons.directions_walk,
-              size: 30.0,
-            ),
-            onPressed: () {},
-          ),
-        ),
-        SizedBox(
-          width: 50,
-          height: 50,
+          width: 65,
+          height: 65,
           child: FloatingActionButton(
             heroTag: 'btn3',
             backgroundColor: kPrimaryDarkColor,
             child: Icon(
               Icons.add,
-              size: 30.0,
+              size: 35.0,
             ),
             onPressed: () {
               showModalBottomSheet(
@@ -54,6 +41,19 @@ class BottomRowButtons extends StatelessWidget {
                 },
               );
             },
+          ),
+        ),
+        SizedBox(
+          width: 50,
+          height: 50,
+          child: FloatingActionButton(
+            heroTag: 'btn2',
+            backgroundColor: kPrimaryDarkColor,
+            child: Icon(
+              Icons.timeline,
+              size: 30.0,
+            ),
+            onPressed: () => Navigator.pushNamed(context, '/timeline'),
           ),
         ),
       ],
