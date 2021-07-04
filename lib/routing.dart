@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'view/Signin/signin_screen.dart';
 import 'view/Signup/signup_screen.dart';
 import 'view/Settings/settings_screen.dart';
-import 'view/ChangeEmail/change_email.dart';
+import 'view/ChangeUsername/change_username.dart';
 import 'view/Timeline/timeline_screen.dart';
 import 'view/MyProfile/my_profile_screen.dart';
 import 'view/OtherUsers/other_users_screen.dart';
@@ -26,8 +26,8 @@ class Routing {
         return MaterialPageRoute(builder: (_) => AllMessagesScreen());
       case anotherUserRoute:
         return MaterialPageRoute(builder: (_) => AnotherUserScreen());
-      case changeEmailRoute:
-        return MaterialPageRoute(builder: (_) => ChangeEmailScreen());
+      case changeUsernameRoute:
+        return MaterialPageRoute(builder: (_) => ChangeUsernameScreen());
       case changePasswordRoute:
         return MaterialPageRoute(builder: (_) => ChangePasswordScreen());
       case forgotPasswordRoute:
@@ -64,7 +64,7 @@ const String signInRoute = '/signIn';
 const String signUpRoute = '/signUp';
 const String messsagesRoute = '/messages';
 const String anotherUserRoute = '/anotherUser';
-const String changeEmailRoute = '/changeEmail';
+const String changeUsernameRoute = '/changeUsername';
 const String changePasswordRoute = '/changePassword';
 const String forgotPasswordRoute = '/forgotPassword';
 const String messageDetailRoute = '/messageDetails';

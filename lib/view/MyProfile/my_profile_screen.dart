@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
 
 import 'package:provider/provider.dart';
-import 'package:whoops/provider/auth_token_provider.dart';
+import 'package:whoops/provider/user_provider.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:whoops/controller/auth_service.dart';
@@ -55,7 +55,7 @@ class MyProfileScreen extends StatelessWidget {
             Navigator.pushNamed(context, '/settings');
           },
         ),
-        Consumer<AuthTokenProvider>(
+        Consumer<UserProvider>(
           builder: (context, tokenData, child) {
             return IconButton(
               icon: Icon(Icons.logout),

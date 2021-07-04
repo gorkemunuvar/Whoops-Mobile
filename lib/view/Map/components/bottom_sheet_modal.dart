@@ -10,7 +10,7 @@ import 'package:whoops/model/whoop_model.dart';
 import 'package:whoops/model/address_model.dart';
 import 'package:whoops/controller/whoop_service.dart';
 import 'package:whoops/view/utils/button_component.dart';
-import 'package:whoops/provider/auth_token_provider.dart';
+import 'package:whoops/provider/user_provider.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
 import 'package:whoops/controller/reverse_geocoding_service.dart';
 
@@ -68,8 +68,8 @@ class BottomSheetModal extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 32.0, vertical: 16.0),
-              child: Consumer<AuthTokenProvider>(
-                  builder: (context, tokenData, child) {
+              child:
+                  Consumer<UserProvider>(builder: (context, tokenData, child) {
                 return ButtonComponent(
                   text: 'Paylaş',
                   textColor: kPrimaryWhiteColor,

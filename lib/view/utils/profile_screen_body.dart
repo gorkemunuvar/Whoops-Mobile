@@ -4,7 +4,7 @@ import 'package:flutter_map/flutter_map.dart';
 
 import 'package:provider/provider.dart';
 import 'package:whoops/controller/user_service.dart';
-import 'package:whoops/provider/auth_token_provider.dart';
+import 'package:whoops/provider/user_provider.dart';
 
 import 'package:whoops/model/user_model.dart';
 import 'package:whoops/model/whoop_model.dart';
@@ -15,6 +15,8 @@ import 'package:whoops/helpers/location_name_helper.dart';
 import 'whoop_card.dart';
 import 'circle_avatar_component.dart';
 import 'flutter_map_widget.dart';
+
+import 'package:whoops/provider/user_provider.dart';
 
 class ProfileScreenBody extends StatefulWidget {
   @override
@@ -28,14 +30,17 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AuthTokenProvider>(
+    return Consumer<UserProvider>(
       builder: (context, tokenData, child) {
         return FutureBuilder(
-          future: UserService.getMyProfileUser(tokenData.accessToken),
+          future: UserService.getMyProfile(tokenData.accessToken),
           builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data != null) {
                 User user = snapshot.data;
+
+                Provider.of<UserProvider>(context, listen: false)
+                    .updateUser(user);
 
                 return CustomScrollView(
                   slivers: <Widget>[
@@ -45,7 +50,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                       snap: _snap,
                       floating: _floating,
                       expandedHeight: 350.0,
-                      flexibleSpace: _buildFlexibleSpaceBar(user.whoops),
+                      flexibleSpace: _buildFlexibleSpaceBar(user),
                     ),
                     _buildSliverList(user.whoops),
                   ],
@@ -61,16 +66,16 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   }
 
   //Flexible component for CustomScrollView
-  Widget _buildFlexibleSpaceBar(List<Whoop> whoops) {
+  Widget _buildFlexibleSpaceBar(User user) {
     String lastLocation = '';
     List<Marker> markers = [];
 
-    if (whoops.length != 0) {
-      Address address = whoops[whoops.length - 1].address;
+    if (user.whoops.length != 0) {
+      Address address = user.whoops[user.whoops.length - 1].address;
       lastLocation =
           '${address.province.length > 7 ? address.province.substring(0, 7) + '.' : address.province}, ${address.countryCode.toUpperCase()}';
 
-      for (Whoop whoop in whoops) {
+      for (Whoop whoop in user.whoops) {
         double latitude = whoop.latitude;
         double longitude = whoop.longitude;
 
@@ -94,11 +99,15 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           //Map Stack
-          _ProfileMapComponent(markers: markers),
+          _ProfileMapComponent(
+            userName: user.username,
+            markers: markers,
+          ),
           SizedBox(height: 10),
           //Info column
           _ProfileInfoComponent(
-            whoopsCount: whoops.length,
+            aboutMe: user.aboutMe,
+            whoopsCount: user.whoops.length,
             lastLocation: lastLocation,
           ),
         ],
@@ -144,10 +153,11 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 
 //Texts and social media info icons
 class _ProfileInfoComponent extends StatelessWidget {
+  final String aboutMe;
   final int whoopsCount;
   final String lastLocation;
 
-  _ProfileInfoComponent({this.whoopsCount, this.lastLocation});
+  _ProfileInfoComponent({this.aboutMe, this.whoopsCount, this.lastLocation});
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +210,14 @@ class _ProfileInfoComponent extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: 25),
+        SizedBox(height: 10),
+        aboutMe != null
+            ? Text(
+                aboutMe,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              )
+            : Text(''),
+        SizedBox(height: 5),
         Text(
           whoopsCount != 0
               ? 'Whoop\'larım'
@@ -218,9 +235,10 @@ class _ProfileInfoComponent extends StatelessWidget {
 
 //Map and Profile Picture
 class _ProfileMapComponent extends StatelessWidget {
+  final String userName;
   final List<Marker> markers;
 
-  _ProfileMapComponent({this.markers});
+  _ProfileMapComponent({this.userName, this.markers});
 
   @override
   Widget build(BuildContext context) {
@@ -249,7 +267,7 @@ class _ProfileMapComponent extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '@asligamze',
+                  '@$userName',
                   style: TextStyle(
                     color: kPrimaryDarkColor,
                   ),

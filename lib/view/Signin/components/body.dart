@@ -2,12 +2,12 @@ import 'dart:io';
 import 'dart:convert';
 import 'background.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:whoops/constants.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:whoops/controller/storage.dart';
 import 'package:whoops/view/utils/button_component.dart';
-import 'package:whoops/provider/auth_token_provider.dart';
+import 'package:whoops/provider/user_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
 
@@ -303,9 +303,9 @@ class _BodyState extends State<Body> {
 
           //Device has tokens anyway in this scope
           //Update tokens for AuthTokenProvider then.
-          Provider.of<AuthTokenProvider>(context, listen: false)
+          Provider.of<UserProvider>(context, listen: false)
               .updateAccessToken(accessToken);
-          Provider.of<AuthTokenProvider>(context, listen: false)
+          Provider.of<UserProvider>(context, listen: false)
               .updateRefreshToken(refreshToken);
 
           print('LOGGED IN');
@@ -334,6 +334,8 @@ class _BodyState extends State<Body> {
       body: json.encode(body),
     );
 
+    print(response.body);
+
     //If user logs in correctly
     if (response.statusCode == 201) {
       //Get access and refresh token from the server
@@ -349,9 +351,9 @@ class _BodyState extends State<Body> {
         tokens['refresh_token'],
       )
           .then((value) {
-        Provider.of<AuthTokenProvider>(context, listen: false)
+        Provider.of<UserProvider>(context, listen: false)
             .updateAccessToken(tokens['access_token']);
-        Provider.of<AuthTokenProvider>(context, listen: false)
+        Provider.of<UserProvider>(context, listen: false)
             .updateRefreshToken(tokens['refresh_token']);
 
         print('LOGGED IN');

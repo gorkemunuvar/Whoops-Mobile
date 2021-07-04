@@ -6,7 +6,7 @@ import 'package:whoops/model/user_model.dart';
 import 'package:whoops/model/whoop_model.dart';
 
 class UserService {
-  static Future<User> getMyProfileUser(String accessToken) async {
+  static Future<User> getMyProfile(String accessToken) async {
     var headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -28,5 +28,21 @@ class UserService {
     user.whoops = whoops;
 
     return user;
+  }
+
+  static Future<void> updateAccount(String body, String accessToken) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.put(
+      '$kServerUrl/user',
+      headers: headers,
+      body: body,
+    );
+
+    print(response.body);
   }
 }

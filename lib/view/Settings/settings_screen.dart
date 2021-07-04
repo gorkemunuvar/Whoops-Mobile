@@ -28,15 +28,6 @@ class SettingsScreen extends StatelessWidget {
         'Ayarlar',
         style: TextStyle(color: kPrimaryWhiteColor),
       ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.done,
-            color: Colors.white,
-          ),
-          onPressed: () {},
-        )
-      ],
     );
   }
 }

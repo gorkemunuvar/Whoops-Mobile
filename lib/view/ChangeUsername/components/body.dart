@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
 import 'package:whoops/view/utils/button_component.dart';
 import 'package:whoops/view/utils/text_field_component.dart';
-import 'package:whoops/view/ChangeEmail/components/background.dart';
+import 'package:whoops/view/ChangeUsername/components/background.dart';
 
 class Body extends StatelessWidget {
   @override
