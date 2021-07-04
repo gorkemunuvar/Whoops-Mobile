@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:whoops/model/user_model.dart';
+
 import 'background.dart';
 import 'package:flutter/material.dart';
 import 'package:whoops/constants.dart';
@@ -198,24 +200,29 @@ class _BodyState extends State<Body> {
   }
 
   Future<bool> _isTokenBlacklisted(String accessToken) async {
-    Map<String, String> body = {'access_token': accessToken};
+    int statusCode;
 
     final headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
     };
 
     http.Response response = await http.post(
       '$kServerUrl/token/is_token_blacklisted',
       headers: headers,
-      body: json.encode(body),
     );
+    statusCode = response.statusCode;
 
-    print('_isTokenBlacklisted() func. STATUS CODE = ${response.statusCode}');
+    if (statusCode == 200) {
+      User user = User.fromJson(jsonDecode(response.body));
+      Provider.of<UserProvider>(context, listen: false).updateUser(user);
+      print(user.username);
+    }
 
     //200 means token is blacklisted
     //404 means token is not blacklisted
-    if (response.statusCode == 200) return true;
+    if (statusCode == 200) return true;
     return false;
   }
 
@@ -255,7 +262,7 @@ class _BodyState extends State<Body> {
 
           bool isTokenBlacklisted = await _isTokenBlacklisted(accessToken);
 
-          if (isTokenBlacklisted) {
+          if (!isTokenBlacklisted) {
             print('Token was blacklisted.');
 
             //Do not let user login

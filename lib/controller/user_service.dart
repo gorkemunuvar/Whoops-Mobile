@@ -6,6 +6,22 @@ import 'package:whoops/model/user_model.dart';
 import 'package:whoops/model/whoop_model.dart';
 
 class UserService {
+  static Future<User> getUser(String accessToken) async {
+    var headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $accessToken',
+    };
+
+    http.Response response = await http.get(
+      '$kServerUrl/user',
+      headers: headers,
+    );
+    dynamic userJson = convert.jsonDecode(response.body);
+
+    return User.fromJson(userJson);
+  }
+
   static Future<User> getMyProfile(String accessToken) async {
     var headers = {
       'Content-Type': 'application/json',

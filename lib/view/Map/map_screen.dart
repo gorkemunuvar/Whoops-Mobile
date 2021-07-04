@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:whoops/model/user_model.dart';
+import 'package:whoops/provider/user_provider.dart';
 import 'package:whoops/view/Map/components/body.dart';
 
 class MapScreen extends StatelessWidget {
@@ -10,24 +13,55 @@ class MapScreen extends StatelessWidget {
         key: globalKey,
         drawer: Drawer(
           child: Container(
+            width: 50,
             color: Colors.white,
-            child: ListView(
+            child: Stack(
               children: [
-                _listTile(
-                  "Profilim",
-                  Icons.person,
-                  () => Navigator.pushNamed(context, '/myProfile'),
+                ListView(
+                  children: [
+                    Consumer<UserProvider>(
+                      builder: (context, data, child) {
+                        User user = data.user;
+                        return Container(
+                          padding: EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage:
+                                    AssetImage('assets/images/profile.png'),
+                                radius: 40,
+                              ),
+                              SizedBox(width: 5),
+                              Expanded(
+                                child: FittedBox(
+                                  child: Text(
+                                    "${user.firstName} ${user.lastName}",
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                    _listTile(
+                      "Mesajlar",
+                      Icons.message,
+                      () => Navigator.pushNamed(context, '/messages'),
+                    ),
+                    _listTile(
+                      "Ayarlar",
+                      Icons.settings,
+                      () => Navigator.pushNamed(context, '/settings'),
+                    ),
+                  ],
                 ),
-                _listTile(
-                  "Mesajlar",
-                  Icons.message,
-                  () => Navigator.pushNamed(context, '/messages'),
-                ),
-                _listTile(
-                  "Ayarlar",
-                  Icons.settings,
-                  () => Navigator.pushNamed(context, '/settings'),
-                ),
+                Align(
+                  alignment: Alignment.bottomLeft,
+                  child: _listTile("Çıkış Yap", Icons.exit_to_app, () {}),
+                )
               ],
             ),
           ),

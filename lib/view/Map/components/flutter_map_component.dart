@@ -26,7 +26,6 @@ Future<LatLng> _currentLocation;
 class _FlutterMapComponentState extends State<FlutterMapComponent> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _currentLocation = LocationService.getCurrentLocation();
   }
@@ -49,7 +48,7 @@ class _FlutterMapComponentState extends State<FlutterMapComponent> {
                   LatLng(40.04145833569767, 29.11417283140674);
               if (snapshot.connectionState == ConnectionState.done) {
                 centerLocation = snapshot.data;
-                _mapController.move(centerLocation, 10);
+                // _mapController.move(centerLocation, 10);
               }
               return MapStreamBuilder(
                 centerLocation: centerLocation,
