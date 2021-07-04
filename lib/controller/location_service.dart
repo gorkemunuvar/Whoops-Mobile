@@ -1,8 +1,8 @@
 import 'package:latlong/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 
-class CurrentLocation {
-  Future<LatLng> get() async {
+class LocationService {
+  static Future<LatLng> getCurrentLocation() async {
     Position position = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.high,
     );

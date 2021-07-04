@@ -16,6 +16,8 @@ import 'whoop_card.dart';
 import 'circle_avatar_component.dart';
 import 'flutter_map_widget.dart';
 
+import 'package:latlong/latlong.dart';
+
 import 'package:whoops/provider/user_provider.dart';
 
 class ProfileScreenBody extends StatefulWidget {
@@ -250,9 +252,22 @@ class _ProfileMapComponent extends StatelessWidget {
           //Map
           SizedBox(
             height: 250,
-            child: FlutterMapWidget(
-              markers: markers,
-              mapZoom: 4.8,
+            child: FlutterMap(
+              options: MapOptions(
+                center: LatLng(38.9573415, 35.240741),
+                maxZoom: 18,
+                zoom: 4.8,
+              ),
+              layers: [
+                TileLayerOptions(
+                  urlTemplate:
+                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  subdomains: ['a', 'b', 'c'],
+                ),
+                MarkerLayerOptions(
+                  markers: markers == null ? [] : markers,
+                ),
+              ],
             ),
           ),
           Positioned(

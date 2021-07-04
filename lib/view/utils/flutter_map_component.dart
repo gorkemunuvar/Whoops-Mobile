@@ -58,7 +58,6 @@ class FlutterMapComponent extends StatelessWidget {
                   return FlutterMapWidget(
                     markers: markers,
                     mapZoom: 4.8,
-                    clusterOptions: true,
                   );
                 }
               }
@@ -66,7 +65,6 @@ class FlutterMapComponent extends StatelessWidget {
               return FlutterMapWidget(
                 markers: [],
                 mapZoom: 4.8,
-                clusterOptions: true,
               );
             },
           ),

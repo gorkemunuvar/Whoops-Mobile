@@ -11,9 +11,26 @@ import 'package:whoops/controller/stream_socket.dart';
 import 'package:whoops/provider/whoops_provider.dart';
 import 'package:whoops/view/utils/flutter_map_widget.dart';
 
+import 'package:whoops/controller/location_service.dart';
+
+//LatLng currentLocation;
 StreamSocket streamSocket = StreamSocket();
 
-class FlutterMapComponent extends StatelessWidget {
+class FlutterMapComponent extends StatefulWidget {
+  @override
+  _FlutterMapComponentState createState() => _FlutterMapComponentState();
+}
+
+Future<LatLng> _currentLocation;
+
+class _FlutterMapComponentState extends State<FlutterMapComponent> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _currentLocation = LocationService.getCurrentLocation();
+  }
+
   @override
   Widget build(BuildContext context) {
     streamSocket.listen(kServerUrl);
@@ -25,53 +42,76 @@ class FlutterMapComponent extends StatelessWidget {
       children: [
         Expanded(
           flex: 9,
-          child: StreamBuilder(
-            stream: streamSocket.getResponse,
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text('snapshot.hasError'));
-              } else {
-                if (snapshot.data != null) {
-                  var whoopJsonList =
-                      jsonDecode(snapshot.data)['whoops'] as List;
-                  print(whoopJsonList);
+          child: FutureBuilder(
+            future: _currentLocation,
+            builder: (BuildContext context, AsyncSnapshot<LatLng> snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.done:
+                  print('done worked.');
+                  return MapStreamBuilder(centerLocation: snapshot.data);
 
-                  List<Whoop> whoops = whoopJsonList
-                      .map((whoopJson) => Whoop.fromJson(whoopJson))
-                      .toList();
-
-                  List<Marker> markers = whoops.map((whoop) {
-                    return Marker(
-                      anchorPos: AnchorPos.align(AnchorAlign.center),
-                      height: 40.0,
-                      width: 200.0,
-                      point: LatLng(whoop.latitude, whoop.longitude),
-                      builder: (ctx) => _CustomMarkerContent(
-                        whoopTitle: whoop.title,
-                      ),
-                    );
-                  }).toList();
-
-                  Provider.of<WhoopsProvider>(context, listen: true)
-                      .updateWhoops(whoops);
-
-                  return FlutterMapWidget(
-                    markers: markers,
-                    mapZoom: 4.8,
-                    clusterOptions: true,
-                  );
-                }
+                default:
+                  print('default worked.');
+                  return MapStreamBuilder();
               }
-
-              return FlutterMapWidget(
-                markers: [],
-                mapZoom: 4.8,
-                clusterOptions: true,
-              );
             },
           ),
         ),
       ],
+    );
+  }
+}
+
+class MapStreamBuilder extends StatelessWidget {
+  final LatLng centerLocation;
+
+  MapStreamBuilder({this.centerLocation});
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: streamSocket.getResponse,
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        if (snapshot.hasError) {
+          return Center(child: Text('snapshot.hasError'));
+        } else {
+          if (snapshot.data != null) {
+            var whoopJsonList = jsonDecode(snapshot.data)['whoops'] as List;
+            print(whoopJsonList);
+
+            List<Whoop> whoops = whoopJsonList
+                .map((whoopJson) => Whoop.fromJson(whoopJson))
+                .toList();
+
+            List<Marker> markers = whoops.map((whoop) {
+              return Marker(
+                anchorPos: AnchorPos.align(AnchorAlign.center),
+                height: 40.0,
+                width: 200.0,
+                point: LatLng(whoop.latitude, whoop.longitude),
+                builder: (ctx) => _CustomMarkerContent(
+                  whoopTitle: whoop.title,
+                ),
+              );
+            }).toList();
+
+            Provider.of<WhoopsProvider>(context, listen: true)
+                .updateWhoops(whoops);
+
+            return FlutterMapWidget(
+              markers: markers,
+              mapZoom: 7,
+              centerLocation: centerLocation,
+            );
+          }
+        }
+
+        return FlutterMapWidget(
+          markers: [],
+          mapZoom: 7,
+          centerLocation: centerLocation,
+        );
+      },
     );
   }
 }
