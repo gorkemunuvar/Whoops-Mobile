@@ -95,6 +95,7 @@ class MapStreamBuilder extends StatelessWidget {
                 point: LatLng(whoop.latitude, whoop.longitude),
                 builder: (ctx) => _CustomMarkerContent(
                   whoopTitle: whoop.title,
+                  whoopTag: whoop.tags,
                 ),
               );
             }).toList();
@@ -117,8 +118,9 @@ class MapStreamBuilder extends StatelessWidget {
 
 class _CustomMarkerContent extends StatefulWidget {
   final String whoopTitle;
+  final List whoopTag;
 
-  _CustomMarkerContent({this.whoopTitle});
+  _CustomMarkerContent({this.whoopTitle, this.whoopTag});
 
   @override
   __CustomMarkerContentState createState() => __CustomMarkerContentState();
@@ -150,11 +152,23 @@ class __CustomMarkerContentState extends State<_CustomMarkerContent> {
     );
   }
 
-  Icon marker() {
-    return Icon(
-      Icons.pin_drop,
-      size: 30.0,
-    );
+  Image marker() {
+    String asset = "assets/icons/whoop_markers";
+
+    if (widget.whoopTag[0].contains("basket"))
+      return Image.asset("$asset/basketball.png");
+    else if (widget.whoopTag[0].contains("futbol"))
+      return Image.asset("$asset/football.png");
+    else if (widget.whoopTag[0].contains("voleybol"))
+      return Image.asset("$asset/volleyball.png");
+    else if (widget.whoopTag[0].contains("müzik"))
+      return Image.asset("$asset/music.png");
+    else if (widget.whoopTag[0].contains("müziği"))
+      return Image.asset("$asset/guitar.png");
+    else if (widget.whoopTag[0].contains("dans"))
+      return Image.asset("$asset/dance.png");
+
+    return Image.asset("$asset/marker.png");
   }
 
   Visibility popup() {
