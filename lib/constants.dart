@@ -6,4 +6,4 @@ const kPrimaryDarkColor = Color(0xFF0E1111);
 
 //Utilities
 //const String kServerUrl = 'https://whoops-backend.herokuapp.com';
-const String kServerUrl = 'https://e48019be9c8e.ngrok.io';
+const String kServerUrl = 'https://22082db413be.ngrok.io';

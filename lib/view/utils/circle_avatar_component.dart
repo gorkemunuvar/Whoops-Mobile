@@ -5,9 +5,14 @@ import 'package:whoops/constants.dart';
 class CircleAvatarComponent extends StatelessWidget {
   final double radius;
   final double borderSize;
+  final ImageProvider<Object> backgroundImage;
   //final Image or String = 'assets/image.vsvs'
 
-  CircleAvatarComponent({@required this.radius, this.borderSize});
+  CircleAvatarComponent({
+    @required this.radius,
+    this.borderSize,
+    this.backgroundImage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +22,12 @@ class CircleAvatarComponent extends StatelessWidget {
             backgroundColor: kPrimaryDarkColor,
             child: CircleAvatar(
               radius: radius,
-              backgroundImage: AssetImage('assets/images/profile.png'),
+              backgroundImage: backgroundImage,
             ),
           )
         : CircleAvatar(
             radius: radius,
-            backgroundImage: AssetImage('assets/images/profile.png'),
+            backgroundImage: backgroundImage,
           );
   }
 }

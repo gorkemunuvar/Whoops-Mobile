@@ -11,6 +11,7 @@ class User {
   final String twitterUsername;
   final String instagramUsername;
   final String facebookUsername;
+  final String avatarUrl;
   List<Whoop> whoops;
 
   User(
@@ -24,6 +25,7 @@ class User {
     this.twitterUsername,
     this.instagramUsername,
     this.facebookUsername,
+    this.avatarUrl,
     this.whoops,
   });
 
@@ -39,6 +41,7 @@ class User {
       'twitter_username': twitterUsername,
       'instagram_username': instagramUsername,
       'facebook_username': facebookUsername,
+      'avatar_url': avatarUrl
     };
   }
 
@@ -53,5 +56,6 @@ class User {
         twitterUsername = json['twitter_username'] as String,
         instagramUsername = json['instagram_username'] as String,
         facebookUsername = json['facebook_username'] as String,
+        avatarUrl = json['avatar_url'] as String,
         whoops = null;
 }

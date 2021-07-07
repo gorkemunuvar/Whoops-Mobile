@@ -45,7 +45,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
 
                 User user = snapshot.data;
 
-                Provider.of<UserProvider>(context, listen: false)
+                Provider.of<UserProvider>(context, listen: true)
                     .updateUser(user);
 
                 return CustomScrollView(
@@ -106,7 +106,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
         children: [
           //Map Stack
           _ProfileMapComponent(
-            userName: user.username,
+            user: user,
             markers: markers,
           ),
           SizedBox(height: 10),
@@ -241,13 +241,22 @@ class _ProfileInfoComponent extends StatelessWidget {
 
 //Map and Profile Picture
 class _ProfileMapComponent extends StatelessWidget {
-  final String userName;
+  final User user;
   final List<Marker> markers;
 
-  _ProfileMapComponent({this.userName, this.markers});
+  _ProfileMapComponent({this.user, this.markers});
 
   @override
   Widget build(BuildContext context) {
+    ImageProvider<Object> backgroundImage = AssetImage(
+      'assets/images/profile.png',
+    );
+
+    if (user.avatarUrl != null)
+      backgroundImage = NetworkImage(
+        '$kServerUrl/static/images/avatars/${user.avatarUrl}',
+      );
+
     return Expanded(
       child: Stack(
         overflow: Overflow.visible,
@@ -283,10 +292,11 @@ class _ProfileMapComponent extends StatelessWidget {
                 CircleAvatarComponent(
                   radius: 40,
                   borderSize: 3,
+                  backgroundImage: backgroundImage,
                 ),
                 SizedBox(height: 5),
                 Text(
-                  '@$userName',
+                  '@${user.username}',
                   style: TextStyle(
                     color: kPrimaryDarkColor,
                   ),
