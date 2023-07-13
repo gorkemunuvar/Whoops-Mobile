@@ -1,19 +1,10 @@
-# whoops
+# Whoops
 
-A new Flutter project.
+This app was a prototype for my final project for my university. 
 
-## Getting Started
+The main purpose of this project is to enable people to see what is happening around them based on location. People can share what they are doing through the application in their location and interact with other people.
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+It works with Socket IO to make the whoops in real time and backend is implemented in Flask.
 
 <img src="https://github.com/gorkemunuvar/Whoops-Mobile/assets/34106700/3a7b2074-abf5-457c-87d4-c33406729122" width="200">
 <img src="https://github.com/gorkemunuvar/Whoops-Mobile/assets/34106700/8f5a7e1d-ccd9-4469-8bd5-3b53cd3f584f" width="200">
